@@ -1,6 +1,7 @@
 package cn.ryths.blog.app.view.index
 
 import android.app.Fragment
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -11,6 +12,7 @@ import android.widget.Toast
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.entity.Article
 import cn.ryths.blog.app.entity.Result
+import cn.ryths.blog.app.view.article.ArticleActivity
 import com.jude.rollviewpager.RollPagerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 
@@ -40,7 +42,7 @@ class IndexFragment : Fragment() {
      */
     private lateinit var rollView: RollPagerView
 
-    private val rollViewAdapter = RollViewAdapter()
+    private lateinit var rollViewAdapter: RollViewAdapter
 
     /**
      * 回调
@@ -88,6 +90,8 @@ class IndexFragment : Fragment() {
         rollView = RollPagerView(view.context)
         rollView.setPlayDelay(2000)
         rollView.layoutParams = layoutParams
+        //初始化轮播图适配器
+        rollViewAdapter = RollViewAdapter(rollView)
 
         //设置列表元素点击的监听
 
@@ -132,7 +136,9 @@ class IndexFragment : Fragment() {
      * 列表点击的事件监听
      */
     private fun onItemClickEvent(view: View, article: Article) {
-        Toast.makeText(activity, article.toString(), 2000).show()
+        val intent = Intent(activity, ArticleActivity::class.java)
+        intent.putExtra("articleId", article.id)
+        startActivity(intent)
     }
 
 

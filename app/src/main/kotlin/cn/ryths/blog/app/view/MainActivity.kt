@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.view.activity
+package cn.ryths.blog.app.view
 
 import android.app.Fragment
 import android.content.res.ColorStateList

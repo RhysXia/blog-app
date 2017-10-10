@@ -9,6 +9,7 @@ import android.widget.TextView
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.entity.Article
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
 
 class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
     private var listener: ItemListener? = null
@@ -131,13 +132,22 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
             val poster = itemView.findViewById<ImageView>(R.id.list_item_poster)
             val title = itemView.findViewById<TextView>(R.id.list_item_title)
             val summary = itemView.findViewById<TextView>(R.id.list_item_summary)
+            val createDate = itemView.findViewById<TextView>(R.id.list_item_createDate)
+            val readNum = itemView.findViewById<TextView>(R.id.list_item_readNum)
+            val praiseNum = itemView.findViewById<TextView>(R.id.list_item_praiseNum)
+            val categoryName = itemView.findViewById<TextView>(R.id.list_item_category_name)
             //设置数据
             Picasso.with(itemView.context)
                     .load(article.poster)
                     .into(poster)
-            title.text = article.title
-            summary.text = article.summary
+            title.text = " " + article.title
+            summary.text = " " + article.summary
+            praiseNum.text = " " + article.praiseNum.toString()
+            readNum.text = " " + article.readNum.toString()
+            categoryName.text = " " + article.category!!.name
 
+            val date = article.createDate
+            createDate.text = " " + SimpleDateFormat("yyyy-MM-dd HH:mm").format(date)
         }
 
     }
