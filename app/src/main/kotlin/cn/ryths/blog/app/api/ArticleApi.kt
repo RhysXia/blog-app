@@ -4,20 +4,26 @@ import cn.ryths.blog.app.entity.Article
 import cn.ryths.blog.app.entity.Result
 import io.reactivex.Observable
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ArticleApi {
 
     @GET("/articles/recommendation")
-    fun getRecommendation(@Query("currentPage") currentPage: Int,
-                          @Query("pageSize") pageSize: Int,
-                          @Query("includeCategory") includeCategory: Boolean = false,
-                          @Query("includeAuthor") includeAuthor: Boolean = false): Observable<Result<List<Article>>>
+    fun findAllRecommendation(@Query("currentPage") currentPage: Int,
+                              @Query("pageSize") pageSize: Int,
+                              @Query("includeCategory") includeCategory: Boolean,
+                              @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
 
     @GET("/articles")
-    fun getList(@Query("currentPage") currentPage: Int,
+    fun findAll(@Query("currentPage") currentPage: Int,
                 @Query("pageSize") pageSize: Int,
-                @Query("includeCategory") includeCategory: Boolean = false,
-                @Query("includeAuthor") includeAuthor: Boolean = false): Observable<Result<List<Article>>>
+                @Query("includeCategory") includeCategory: Boolean,
+                @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
+
+    @GET("/articles/{id}")
+    fun findById(@Path("id") id: Long,
+                 @Query("includeCategory") includeCategory: Boolean,
+                 @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<Article>>
 
 }

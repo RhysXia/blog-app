@@ -4,11 +4,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="cn.ryths.blog.app.view.article.ArticleActivity">
+        tools:context="cn.ryths.blog.app.view.article.ArticleActivity"
+        android:orientation="vertical">
+
 
     <FrameLayout
             android:id="@+id/fragment_article"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></FrameLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1"></FrameLayout>
 
 </LinearLayout>

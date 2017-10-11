@@ -13,5 +13,6 @@ data class User(
         var nickname: String? = null,
         var password: String? = null,
         var avatar: String? = null,
+        var summary: String? = null,
         var roles: List<Role>? = null
 )
