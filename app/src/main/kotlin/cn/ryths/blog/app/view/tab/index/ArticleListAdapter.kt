@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.view.index
+package cn.ryths.blog.app.view.tab.index
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -130,6 +130,8 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
         fun bindArticle(article: Article) {
             //获取view
             val poster = itemView.findViewById<ImageView>(R.id.list_item_poster)
+//            val avatar = itemView.findViewById<CircleImageView>(R.id.list_item_author_avatar)
+//            val nickname = itemView.findViewById<TextView>(R.id.list_item_author_nickname)
             val title = itemView.findViewById<TextView>(R.id.list_item_title)
             val summary = itemView.findViewById<TextView>(R.id.list_item_summary)
             val createDate = itemView.findViewById<TextView>(R.id.list_item_createDate)
@@ -137,18 +139,31 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
             val praiseNum = itemView.findViewById<TextView>(R.id.list_item_praiseNum)
             val categoryName = itemView.findViewById<TextView>(R.id.list_item_category_name)
             //设置数据
+            //设置图片
             Picasso.with(itemView.context)
                     .load(article.poster)
                     .into(poster)
-            title.text = " " + article.title
-            summary.text = " " + article.summary
-            praiseNum.text = " " + article.praiseNum.toString()
-            readNum.text = " " + article.readNum.toString()
-            categoryName.text = " " + article.category!!.name
+            //标题
+            title.text = article.title
+//            //设置昵称
+//            nickname.text = article.author!!.nickname
+//            //设置头像
+//            Picasso.with(itemView.context)
+//                    .load(article.author!!.avatar)
+//                    .into(avatar)
 
+            //概要
+            summary.text = article.summary
+
+            //发表时间
             val date = article.createDate
-            createDate.text = " " + SimpleDateFormat("yyyy-MM-dd HH:mm").format(date)
+            val dataStr = SimpleDateFormat("yyyy/MM/dd HH:mm").format(date)
+            createDate.text = dataStr
+            praiseNum.text = article.praiseNum.toString()
+            readNum.text = article.readNum.toString()
+            categoryName.text = article.category!!.name
         }
+
 
     }
 

@@ -11,11 +11,13 @@ interface ArticleApi {
     @GET("/articles/recommendation")
     fun getRecommendation(@Query("currentPage") currentPage: Int,
                           @Query("pageSize") pageSize: Int,
-                          @Query("includeCategory") includeCategory: Boolean = true): Observable<Result<List<Article>>>
+                          @Query("includeCategory") includeCategory: Boolean = false,
+                          @Query("includeAuthor") includeAuthor: Boolean = false): Observable<Result<List<Article>>>
 
     @GET("/articles")
     fun getList(@Query("currentPage") currentPage: Int,
                 @Query("pageSize") pageSize: Int,
-                @Query("includeCategory") includeCategory: Boolean = true): Observable<Result<List<Article>>>
+                @Query("includeCategory") includeCategory: Boolean = false,
+                @Query("includeAuthor") includeAuthor: Boolean = false): Observable<Result<List<Article>>>
 
 }

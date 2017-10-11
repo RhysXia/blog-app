@@ -6,9 +6,9 @@
         android:layout_height="match_parent"
         tools:context="cn.ryths.blog.app.view.article.ArticleActivity">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="article"/>
+    <FrameLayout
+            android:id="@+id/fragment_article"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></FrameLayout>
 
 </LinearLayout>

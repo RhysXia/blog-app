@@ -1,9 +1,9 @@
-package cn.ryths.blog.app.view.index
+package cn.ryths.blog.app.view.tab.index
 
 import cn.ryths.blog.app.api.Api
 import cn.ryths.blog.app.api.ArticleApi
 import cn.ryths.blog.app.entity.Code
-import cn.ryths.blog.app.view.index.IndexFragment.Callback
+import cn.ryths.blog.app.view.tab.index.IndexFragment.Callback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -21,7 +21,7 @@ class IndexPresenter {
      * 添加更多数据到listView适配器
      */
     fun addMoreInRecyclerView(currentPage: Int, pageSize: Int, callback: Callback) {
-        articleApi.getList(currentPage, pageSize)
+        articleApi.getList(currentPage, pageSize,true,true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result ->

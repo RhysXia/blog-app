@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
               android:layout_marginTop="10dp"
-              android:background="@android:color/white">
+              android:background="@android:color/white"
+              android:elevation="3dp">
 
     <ImageView
             android:id="@+id/list_item_poster"
@@ -16,7 +16,8 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="85dp"
-            android:paddingStart="5dp">
+            android:paddingLeft="5dp">
+
 
         <TextView
                 android:id="@+id/list_item_title"
@@ -24,47 +25,63 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/primary_text"
                 android:textStyle="bold"
-                android:layout_alignParentTop="true"/>
+                android:lines="1"
+                android:ellipsize="end"/>
 
         <TextView
                 android:id="@+id/list_item_summary"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondary_text"
-                android:layout_below="@+id/list_item_title"/>
+                android:layout_below="@+id/list_item_title"
+                android:lines="2"
+                android:ellipsize="end"/>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_alignParentBottom="true">
+                android:layout_alignParentBottom="true"
+                android:gravity="center_vertical"
+                android:paddingBottom="2dp">
 
             <TextView
                     android:id="@+id/list_item_createDate"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_time"/>
+                    android:drawableStart="@drawable/ic_time"
+                    android:drawablePadding="5dp"
+                    android:textSize="12sp"/>
 
             <TextView
                     android:id="@+id/list_item_readNum"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_read"/>
+                    android:drawableStart="@drawable/ic_read"
+                    android:drawablePadding="5dp"
+                    android:textSize="12sp"/>
 
             <TextView
                     android:id="@+id/list_item_praiseNum"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_praise"/>
+                    android:drawableStart="@drawable/ic_praise"
+                    android:drawablePadding="5dp"
+                    android:textSize="12sp"/>
 
             <TextView
                     android:id="@+id/list_item_category_name"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_category_name"
+                    android:drawablePadding="5dp"
+                    android:textSize="12sp"/>
         </LinearLayout>
     </RelativeLayout>
 

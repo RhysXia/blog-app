@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.view
+package cn.ryths.blog.app.view.tab
 
 import android.app.Fragment
 import android.content.res.ColorStateList
@@ -9,9 +9,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import cn.ryths.blog.app.R
-import cn.ryths.blog.app.view.category.CategoryFragment
-import cn.ryths.blog.app.view.index.IndexFragment
-import cn.ryths.blog.app.view.setting.SettingFragment
+import cn.ryths.blog.app.view.tab.category.CategoryFragment
+import cn.ryths.blog.app.view.tab.index.IndexFragment
+import cn.ryths.blog.app.view.tab.setting.SettingFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         //判断是否存在当前fragment
         val fragment = fragmentManager.findFragmentByTag("fragment${index}")
         if (fragment == null) {
-            transaction.add(R.id.fragment_main, fragments[index], "fragment${index}")
+            transaction.add(R.id.fragment_tab, fragments[index], "fragment${index}")
         }
         //设置tab颜色
         val imageView = tabs[index].findViewWithTag<ImageView>("tab_image")
