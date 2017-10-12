@@ -24,6 +24,7 @@ interface ArticleApi {
     @GET("/articles/{id}")
     fun findById(@Path("id") id: Long,
                  @Query("includeCategory") includeCategory: Boolean,
-                 @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<Article>>
+                 @Query("includeAuthor") includeAuthor: Boolean,
+                 @Query("includeContent") includeContent: Boolean): Observable<Result<Article>>
 
 }

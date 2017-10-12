@@ -12,9 +12,9 @@ import android.widget.Toast
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.entity.Article
 import cn.ryths.blog.app.entity.Result
-import cn.ryths.blog.app.view.article.ArticleActivity
 import cn.ryths.blog.app.presenter.ArticlePresenter
 import cn.ryths.blog.app.presenter.PresenterCallback
+import cn.ryths.blog.app.view.article.ArticleActivity
 import com.jude.rollviewpager.RollPagerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 
@@ -159,7 +159,7 @@ class IndexFragment : Fragment() {
             }
 
             override fun fail(error: Void?) {
-                Toast.makeText(this@IndexFragment.activity, "网络有问题，请稍后再试！", 3000).show()
+                Toast.makeText(this@IndexFragment.activity, "网络有问题，请稍后再试！", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -172,7 +172,7 @@ class IndexFragment : Fragment() {
             }
 
             override fun fail(error: Void?) {
-                Toast.makeText(this@IndexFragment.activity, "网络有问题，请稍后再试！", 3000).show()
+                Toast.makeText(this@IndexFragment.activity, "网络有问题，请稍后再试！", Toast.LENGTH_SHORT).show()
             }
 
         })

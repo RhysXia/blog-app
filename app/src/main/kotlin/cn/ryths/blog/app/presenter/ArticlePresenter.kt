@@ -62,7 +62,7 @@ class ArticlePresenter {
      * 获取指定文章
      */
     fun findById(id: Long, callback: PresenterCallback<Article?, Void?>) {
-        articleApi.findById(id, true, true)
+        articleApi.findById(id, true, true, true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

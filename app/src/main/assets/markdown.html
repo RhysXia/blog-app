@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>markdown</title>
+    <script src="marked.min.js"></script>
+    <link rel="stylesheet" href="github.css">
+</head>
+<body>
+<div id="content"></div>
+<script>
+    marked.setOptions({
+        renderer: new marked.Renderer(),
+        gfm: true,
+        tables: true,
+        breaks: true,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false
+
+    })
+        var content = window.JsClient.getContent()
+        document.getElementById("content").innerHTML = marked(content)
+</script>
+</body>
+</html>

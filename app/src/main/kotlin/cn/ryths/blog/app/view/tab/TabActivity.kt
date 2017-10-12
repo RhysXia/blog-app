@@ -9,14 +9,15 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import cn.ryths.blog.app.R
+import cn.ryths.blog.app.presenter.ArticlePresenter
 import cn.ryths.blog.app.view.tab.category.CategoryFragment
 import cn.ryths.blog.app.view.tab.index.IndexFragment
 import cn.ryths.blog.app.view.tab.setting.SettingFragment
 
 
-class MainActivity : AppCompatActivity() {
+class TabActivity : AppCompatActivity() {
 
-
+    val articlePresenter = ArticlePresenter()
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

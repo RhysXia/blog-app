@@ -110,7 +110,7 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
         //如果监听器存在，则监听当前view的点击事件
         if (listener != null) {
             view.setOnClickListener {
-                listener!!.onItemClick(it, articles[viewType - this.headers.size + 1])
+                listener!!.onItemClick(it, articles[viewType - this.headers.size])
             }
         }
         return ArticleViewHolder(view)

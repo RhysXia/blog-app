@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -9,12 +10,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:navigationIcon="@drawable/ic_back"
-            android:background="@color/primary"></Toolbar>
+            android:background="@color/primary"
+            app:titleTextColor="@android:color/white">
+
+    </Toolbar>
     <!--作者信息-->
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/article_info_author"
+            android:padding="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:gravity="center_vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/article_info_author_avatar"
@@ -38,12 +47,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    android:textColor="@color/secondary_text"/>
+                    android:textColor="@color/secondary_text"
+                    android:lines="2"
+                    android:ellipsize="end"/>
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-            android:id="@+id/article_info_poster"
+    <!--文章内容-->
+    <WebView
+            android:id="@+id/article_info_content"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    <!--底部-->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+    </LinearLayout>
 </LinearLayout>
