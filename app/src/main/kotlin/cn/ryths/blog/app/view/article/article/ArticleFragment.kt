@@ -2,14 +2,16 @@ package cn.ryths.blog.app.view.article.article
 
 import android.app.Fragment
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.entity.Article
 import cn.ryths.blog.app.presenter.ArticlePresenter
@@ -34,6 +36,10 @@ class ArticleFragment : Fragment() {
 
     private lateinit var content: WebView
 
+    private lateinit var poster: ImageView
+
+    private lateinit var praise: Button
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_article_info, container, false)
 
@@ -44,6 +50,8 @@ class ArticleFragment : Fragment() {
         authorAvatar = view.findViewById(R.id.article_info_author_avatar)
         authorNickname = view.findViewById(R.id.article_info_author_nickname)
         authorSummary = view.findViewById(R.id.article_info_author_summary)
+        poster = view.findViewById(R.id.article_info_poster)
+        praise = view.findViewById<Button>(R.id.article_info_praise)
         content = view.findViewById(R.id.article_info_content)
         //支持js
         content.settings.javaScriptEnabled = true
@@ -62,8 +70,22 @@ class ArticleFragment : Fragment() {
      */
     private fun initEvent() {
         //为返回键添加事件
-        toolbar.setNavigationOnClickListener{
+        toolbar.setNavigationOnClickListener {
             activity.finish()
+        }
+        //为点赞按钮添加点击事件
+        praise.setOnClickListener {
+            articlePresenter.praise(articleId,object:PresenterCallback<Void?,Void?>{
+                override fun success(result: Void?) {
+                    //button点亮
+                    //TODO button点亮
+                }
+
+                override fun fail(error: Void?) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+            })
         }
     }
 
@@ -85,6 +107,12 @@ class ArticleFragment : Fragment() {
                         .into(authorAvatar)
                 authorNickname.text = result.author!!.nickname
                 authorSummary.text = result.author!!.summary
+                Picasso.with(view.context)
+                        .load(result.poster)
+                        .into(poster)
+
+                //显示赞
+                praise.text = result.praiseNum.toString()
 
                 //设置js调用
                 content.addJavascriptInterface(JsClient(result.content), "JsClient")

@@ -110,7 +110,8 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
         //如果监听器存在，则监听当前view的点击事件
         if (listener != null) {
             view.setOnClickListener {
-                listener!!.onItemClick(it, articles[viewType - this.headers.size])
+                val pos = viewType - this.headers.size
+                listener!!.onItemClick(it, articles[pos],viewType)
             }
         }
         return ArticleViewHolder(view)
@@ -171,7 +172,13 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
      * 监听器
      */
     interface ItemListener {
-        fun onItemClick(view: View, article: Article)
+        /**
+         * 每个item的点击事件，
+         * [view] 被点击的view
+         * [article] 对应的文章
+         * [position] 该view在列表中的位置
+         */
+        fun onItemClick(view: View, article: Article,position:Int)
     }
 
 }

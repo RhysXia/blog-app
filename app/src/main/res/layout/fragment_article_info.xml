@@ -5,25 +5,25 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <Toolbar
+    <android.support.v7.widget.Toolbar
             android:id="@+id/article_info_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:navigationIcon="@drawable/ic_back"
             android:background="@color/primary"
+            app:navigationIcon="@drawable/ic_back"
             app:titleTextColor="@android:color/white">
-
-    </Toolbar>
+    </android.support.v7.widget.Toolbar>
     <!--作者信息-->
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/article_info_author"
+            android:background="@drawable/border_bottom"
             android:padding="5dp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:elevation="5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/article_info_author_avatar"
@@ -53,17 +53,50 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!--文章内容-->
-    <WebView
-            android:id="@+id/article_info_content"
+    <!--文章-->
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+        <!--文章大图-->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <ImageView
+                    android:id="@+id/article_info_poster"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="fitXY"/>
+            <!--文章内容-->
+            <WebView
+                    android:id="@+id/article_info_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
     <!--底部-->
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/border_top"
+            android:gravity="center_vertical">
 
+        <Button
+                android:id="@+id/article_info_praise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_praise"
+                />
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
     </LinearLayout>
 </LinearLayout>

@@ -69,7 +69,12 @@ class IndexFragment : Fragment() {
         //设置列表元素点击的监听
 
         articleListAdapter.setListener(object : ArticleListAdapter.ItemListener {
-            override fun onItemClick(view: View, article: Article) {
+            override fun onItemClick(view: View, article: Article, position: Int) {
+                //更新阅读数
+                article.readNum = article.readNum!! + 1
+                //更新
+                articleListAdapter.notifyItemChanged(position)
+                //触发跳转
                 onItemClickEvent(view, article)
             }
 

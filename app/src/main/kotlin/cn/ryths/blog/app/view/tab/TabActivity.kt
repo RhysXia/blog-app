@@ -1,13 +1,10 @@
 package cn.ryths.blog.app.view.tab
 
 import android.app.Fragment
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.Button
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.presenter.ArticlePresenter
 import cn.ryths.blog.app.view.tab.category.CategoryFragment
@@ -27,15 +24,15 @@ class TabActivity : AppCompatActivity() {
         tabActive(0)
     }
 
-    private var tabs: List<View> = ArrayList()
+    private var tabs: List<Button> = ArrayList()
     private var fragments: List<Fragment> = ArrayList()
 
     private fun initView() {
-        tabs += findViewById(R.id.tab_index) as LinearLayout
+        tabs += findViewById(R.id.tab_index) as Button
         fragments += IndexFragment()
-        tabs += findViewById(R.id.tab_category) as LinearLayout
+        tabs += findViewById(R.id.tab_category) as Button
         fragments += CategoryFragment()
-        tabs += findViewById(R.id.tab_more) as LinearLayout
+        tabs += findViewById(R.id.tab_setting) as Button
         fragments += SettingFragment()
     }
 
@@ -57,8 +54,7 @@ class TabActivity : AppCompatActivity() {
         }
         //取消tab颜色
         tabs.forEach {
-            val imageView = it.findViewWithTag<ImageView>("tab_image")
-            imageView.imageTintList = ColorStateList.valueOf(Color.BLACK)
+            it.compoundDrawables[1].setTint(Color.BLACK)
         }
         //判断是否存在当前fragment
         val fragment = fragmentManager.findFragmentByTag("fragment${index}")
@@ -66,8 +62,7 @@ class TabActivity : AppCompatActivity() {
             transaction.add(R.id.fragment_tab, fragments[index], "fragment${index}")
         }
         //设置tab颜色
-        val imageView = tabs[index].findViewWithTag<ImageView>("tab_image")
-        imageView.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.primary))
+        tabs[index].compoundDrawables[1].setTint(resources.getColor(R.color.primary))
         //显示当前
         transaction.show(fragments[index])
         transaction.commit()

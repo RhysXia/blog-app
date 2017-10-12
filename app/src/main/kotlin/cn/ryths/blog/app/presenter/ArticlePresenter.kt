@@ -74,4 +74,25 @@ class ArticlePresenter {
                 }
     }
 
+    /**
+     * 点赞
+     */
+    fun praise(id: Long, callback: PresenterCallback<Void?, Void?>) {
+        articleApi.praise(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    //判断请求是否成功
+                    if (it.code == Code.SUCCESS) {
+                        //成功回调
+                        callback.success(null)
+                    } else {
+                        //失败回调
+                        callback.fail(null)
+                    }
+                }
+
+    }
+
+
 }

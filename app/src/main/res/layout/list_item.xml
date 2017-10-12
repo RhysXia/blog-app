@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_time"
+                    android:drawableStart="@drawable/ic_time_small"
                     android:drawablePadding="5dp"
                     android:textSize="12sp"/>
 
@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_read"
+                    android:drawableStart="@drawable/ic_read_small"
                     android:drawablePadding="5dp"
                     android:textSize="12sp"/>
 
@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_praise"
+                    android:drawableStart="@drawable/ic_praise_small"
                     android:drawablePadding="5dp"
                     android:textSize="12sp"/>
 
@@ -79,7 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_category_name"
+                    android:drawableStart="@drawable/ic_category_small"
                     android:drawablePadding="5dp"
                     android:textSize="12sp"/>
         </LinearLayout>
