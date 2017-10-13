@@ -34,7 +34,7 @@ class SettingFragment : Fragment() {
 
 
     private fun initView(view: View) {
-        loginBtn = view.findViewById<CircleImageView>(R.id.tab_setting_login)
+        loginBtn = view.findViewById(R.id.tab_setting_login)
     }
 
 

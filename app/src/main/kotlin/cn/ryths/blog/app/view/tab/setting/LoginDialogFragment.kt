@@ -9,6 +9,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import cn.ryths.blog.app.R
+import cn.ryths.blog.app.presenter.PresenterCallback
+import cn.ryths.blog.app.presenter.UserPresenter
+import cn.ryths.blog.app.utils.TokenUtils
 
 /**
  * 登录注册框
@@ -16,67 +19,64 @@ import cn.ryths.blog.app.R
 class LoginDialogFragment : DialogFragment() {
 
     private lateinit var title: TextView
-    private lateinit var username: EditText
-    private lateinit var password: EditText
+    private lateinit var usernameEditText: EditText
+    private lateinit var passwordEditText: EditText
 
-    private lateinit var dialog:View
+    private val userPresenter = UserPresenter()
+
+    private lateinit var dialog: View
     /**
      * 登录或注册
      */
-    private lateinit var submit: Button
+    private lateinit var submitBtn: Button
     /**
      * 切换登录注册
      */
-    private lateinit var change: Button
+    private lateinit var changeToRegisterBtn: Button
 
-    /**
-     * 判断当前状态
-     */
-    private var isLogin = true
+
+    private lateinit var usernameLabel: TextView
+
+    private lateinit var passwordLabel: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         dialog = inflater.inflate(R.layout.fragment_dialog_login, container, false)
 
-        title = view.findViewById(R.id.fragment_dialog_login_title)
-        username = view.findViewById(R.id.fragment_dialog_login_username)
-        password = view.findViewById(R.id.fragment_dialog_login_password)
-        submit = view.findViewById(R.id.fragment_dialog_login_submit)
-        change = view.findViewById(R.id.fragment_dialog_login_change)
-        setLoginView()
+        title = dialog.findViewById(R.id.fragment_dialog_login_title)
+        usernameEditText = dialog.findViewById(R.id.fragment_dialog_login_username)
+        usernameLabel = dialog.findViewById(R.id.fragment_dialog_login_errorLabel)
+        passwordEditText = dialog.findViewById(R.id.fragment_dialog_login_password)
+        submitBtn = dialog.findViewById(R.id.fragment_dialog_login_submit)
+        changeToRegisterBtn = dialog.findViewById(R.id.fragment_dialog_login_changeToRegister)
         initEvent()
-
         return dialog
     }
 
     private fun initEvent() {
         //切换登录注册事件
-        change.setOnClickListener {
-            if (isLogin) {
-                setRegisterView()
-            } else {
-                setLoginView()
-            }
+        changeToRegisterBtn.setOnClickListener {
+
+        }
+        //登录事件
+        submitBtn.setOnClickListener {
+            val username = usernameEditText.text.toString()
+            val password = passwordEditText.text.toString()
+            userPresenter.login(username, password, object : PresenterCallback<String, String> {
+                //登录成功时，
+                override fun success(result: String) {
+                    TokenUtils.saveToken(activity, result)
+                    val transaction = this@LoginDialogFragment.fragmentManager.beginTransaction()
+                    transaction.remove(this@LoginDialogFragment)
+                    transaction.commit()
+                }
+
+                override fun fail(error: String) {
+                    usernameLabel.text = error
+                    usernameLabel.visibility = View.VISIBLE
+                }
+
+            })
         }
     }
 
-    /**
-     * 将界面信息切换到登录
-     */
-    private fun setLoginView() {
-        //隐藏对话框
-        title.text = "欢迎登录Ryths博客"
-        submit.text = "登录"
-        change.text = "点我注册"
-        isLogin = true
-    }
-
-    /**
-     * 将界面信息切换到注册
-     */
-    private fun setRegisterView() {
-        title.text = "欢迎注册Ryths博客"
-        submit.text = "注册"
-        change.text = "点我登录"
-        isLogin = false
-    }
 }
