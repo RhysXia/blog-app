@@ -22,7 +22,17 @@ class LoginDialogFragment : DialogFragment() {
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
 
-    private val userPresenter = UserPresenter()
+    private var userPresenter: UserPresenter? = null
+
+    fun setUserPresenter(userPresenter: UserPresenter) {
+        this.userPresenter = userPresenter
+    }
+
+    private var listener: Listener? = null
+
+    fun setListener(listener: Listener) {
+        this.listener = listener
+    }
 
     private lateinit var dialog: View
     /**
@@ -35,16 +45,15 @@ class LoginDialogFragment : DialogFragment() {
     private lateinit var changeToRegisterBtn: Button
 
 
-    private lateinit var usernameLabel: TextView
+    private lateinit var errorLabel: TextView
 
-    private lateinit var passwordLabel: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         dialog = inflater.inflate(R.layout.fragment_dialog_login, container, false)
 
         title = dialog.findViewById(R.id.fragment_dialog_login_title)
         usernameEditText = dialog.findViewById(R.id.fragment_dialog_login_username)
-        usernameLabel = dialog.findViewById(R.id.fragment_dialog_login_errorLabel)
+        errorLabel = dialog.findViewById(R.id.fragment_dialog_login_errorLabel)
         passwordEditText = dialog.findViewById(R.id.fragment_dialog_login_password)
         submitBtn = dialog.findViewById(R.id.fragment_dialog_login_submit)
         changeToRegisterBtn = dialog.findViewById(R.id.fragment_dialog_login_changeToRegister)
@@ -61,22 +70,27 @@ class LoginDialogFragment : DialogFragment() {
         submitBtn.setOnClickListener {
             val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
-            userPresenter.login(username, password, object : PresenterCallback<String, String> {
+            userPresenter!!.login(username, password, object : PresenterCallback<String, String> {
                 //登录成功时，
                 override fun success(result: String) {
                     TokenUtils.saveToken(activity, result)
                     val transaction = this@LoginDialogFragment.fragmentManager.beginTransaction()
                     transaction.remove(this@LoginDialogFragment)
                     transaction.commit()
+                    if (listener != null) {
+                        listener!!.onLoginSuccess()
+                    }
                 }
 
                 override fun fail(error: String) {
-                    usernameLabel.text = error
-                    usernameLabel.visibility = View.VISIBLE
+                    errorLabel.text = error
+                    errorLabel.visibility = View.VISIBLE
                 }
-
             })
         }
     }
 
+    interface Listener {
+        fun onLoginSuccess()
+    }
 }

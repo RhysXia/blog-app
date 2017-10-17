@@ -4,6 +4,7 @@ import cn.ryths.blog.app.entity.Result
 import cn.ryths.blog.app.entity.User
 import io.reactivex.Observable
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 
@@ -16,5 +17,8 @@ interface UserApi {
     fun login(@Body user: User): Observable<Result<String>>
 
     @PUT("/token")
-    fun register(@Body user:User):Observable<Result<User>>
+    fun register(@Body user: User): Observable<Result<User>>
+
+    @GET("/users/self")
+    fun getSelf(): Observable<Result<User>>
 }

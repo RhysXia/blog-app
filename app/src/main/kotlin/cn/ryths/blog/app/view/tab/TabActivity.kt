@@ -1,12 +1,14 @@
 package cn.ryths.blog.app.view.tab
 
 import android.app.Fragment
-import android.graphics.Color
+import android.databinding.BaseObservable
+import android.databinding.Bindable
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.Button
+import android.view.View
 import cn.ryths.blog.app.R
-import cn.ryths.blog.app.presenter.ArticlePresenter
+import cn.ryths.blog.app.databinding.ActivityTabBinding
 import cn.ryths.blog.app.view.tab.category.CategoryFragment
 import cn.ryths.blog.app.view.tab.index.IndexFragment
 import cn.ryths.blog.app.view.tab.setting.SettingFragment
@@ -14,57 +16,89 @@ import cn.ryths.blog.app.view.tab.setting.SettingFragment
 
 class TabActivity : AppCompatActivity() {
 
-    val articlePresenter = ArticlePresenter()
+    private lateinit var binding: ActivityTabBinding
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        initView()
-        initEvent()
-        //显示第一个视图
-        tabActive(0)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_tab)
+        binding.viewModel = ViewModel()
     }
 
-    private var tabs: List<Button> = ArrayList()
-    private var fragments: List<Fragment> = ArrayList()
 
-    private fun initView() {
-        tabs += findViewById(R.id.tab_index) as Button
-        fragments += IndexFragment()
-        tabs += findViewById(R.id.tab_category) as Button
-        fragments += CategoryFragment()
-        tabs += findViewById(R.id.tab_setting) as Button
-        fragments += SettingFragment()
-    }
+    inner class ViewModel : BaseObservable() {
+        private var fragmentMap: Map<Int, Fragment> = HashMap()
+        /**
+         * 标记每个tab按键
+         */
+        val Tab_Index = 0
+        val Tab_Category = 1
+        val Tab_Setting = 2
+        /**
+         * 标记当前激活的tab
+         */
+        private var activeTab = -1
 
-    private fun initEvent() {
-        for ((index, tab) in tabs.withIndex()) {
-            tab.setOnClickListener {
-                tabActive(index)
+        @Bindable
+        fun getActiveTab(): Int {
+            return activeTab
+        }
+
+        /**
+         * 初始化
+         */
+        init {
+            //默认激活第一个视图
+            activeTab = Tab_Index
+            val transaction = fragmentManager.beginTransaction()
+            var fragment = fragmentMap[Tab_Index]
+            if (fragment == null) {
+                fragment = IndexFragment()
+                fragmentMap += (Tab_Index to fragment)
+                transaction.add(R.id.fragment_tab, fragment)
             }
+            transaction.show(fragment)
+            transaction.commit()
+        }
+
+        /**
+         * tab点击事件
+         */
+        fun tabClick(button: View, index: Int) {
+            //如果点击的是激活的tab，不做反应
+            if (index == activeTab) {
+                return
+            }
+//            button as Button
+//            activeBtn.compoundDrawables[1]
+//                    .setTint(resources.getColor(R.color.primary_text))
+//            button.compoundDrawables[1]
+//                    .setTint(resources.getColor(R.color.primary))
+//            activeBtn = button
+            val transaction = fragmentManager.beginTransaction()
+            //隐藏当前激活的fragment
+            transaction.hide(fragmentMap[activeTab])
+            //设置激活的tab
+            activeTab = index
+            //从fragmentMap中查找指定的fragment
+            var fragment: Fragment? = fragmentMap[index]
+            //不存在时就创建，并加入到fragmentMap中
+            if (fragment == null) {
+                fragment = when (index) {
+                    Tab_Index -> {
+                        IndexFragment()
+                    }
+                    Tab_Category -> {
+                        CategoryFragment()
+                    }
+                    else -> {
+                        SettingFragment()
+                    }
+                }
+                fragmentMap += (index to fragment)
+                transaction.add(R.id.fragment_tab, fragment)
+            }
+            transaction.show(fragment)
+            transaction.commit()
         }
     }
 
-    private fun tabActive(index: Int) {
-        val transaction = fragmentManager.beginTransaction()
-        //隐藏所有
-        fragments.forEach {
-            if (it.isVisible) {
-                transaction.hide(it)
-            }
-        }
-        //取消tab颜色
-        tabs.forEach {
-            it.compoundDrawables[1].setTint(Color.BLACK)
-        }
-        //判断是否存在当前fragment
-        val fragment = fragmentManager.findFragmentByTag("fragment${index}")
-        if (fragment == null) {
-            transaction.add(R.id.fragment_tab, fragments[index], "fragment${index}")
-        }
-        //设置tab颜色
-        tabs[index].compoundDrawables[1].setTint(resources.getColor(R.color.primary))
-        //显示当前
-        transaction.show(fragments[index])
-        transaction.commit()
-    }
 }

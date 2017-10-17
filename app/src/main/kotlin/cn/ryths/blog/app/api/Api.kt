@@ -1,13 +1,17 @@
 package cn.ryths.blog.app.api
 
+import cn.ryths.blog.app.BaseApplication
+import cn.ryths.blog.app.utils.TokenUtils
 import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Api {
-    private val restrofit = Retrofit.Builder()
-            .baseUrl("http://10.6.12.209:8080")
+
+    private val builder = Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8080")
             .addConverterFactory(
                     GsonConverterFactory.create(
                             GsonBuilder()
@@ -16,12 +20,28 @@ object Api {
                     )
             )
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
 
     /**
      * 创建api实例
      */
     fun <T> newApiInstance(service: Class<T>): T {
-        return restrofit.create(service)
+        val context = BaseApplication.getContext()
+        if (context != null) {
+            val okhttp = OkHttpClient.Builder()
+                    .addInterceptor {
+                        var token = TokenUtils.getToken(context)
+                        if (token == null){
+                            token = ""
+                        }
+                        val request = it.request()
+                                .newBuilder()
+                                .addHeader("Authorization", token)
+                                .build()
+                        it.proceed(request)
+                    }
+                    .build()
+            builder.client(okhttp)
+        }
+        return builder.build().create(service)
     }
 }

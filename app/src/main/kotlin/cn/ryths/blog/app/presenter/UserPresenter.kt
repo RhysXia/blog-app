@@ -30,4 +30,19 @@ class UserPresenter {
                     callback.fail("用户名密码有误")
                 })
     }
+
+    fun getSelf(callback: PresenterCallback<User, String>){
+        userApi.getSelf()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(Consumer<Result<User>> {
+                    if (it.code == Code.SUCCESS) {
+                        callback.success(it.data!!)
+                    } else {
+                        callback.fail(it.message!!)
+                    }
+                }, Consumer<Throwable> {
+                    callback.fail("用户名密码有误")
+                })
+    }
 }
