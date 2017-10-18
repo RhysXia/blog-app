@@ -1,15 +1,15 @@
 package cn.ryths.blog.app.view.adapter
 
+import android.databinding.DataBindingUtil
+import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import cn.ryths.blog.app.BR
 import cn.ryths.blog.app.R
+import cn.ryths.blog.app.databinding.ListItemBinding
 import cn.ryths.blog.app.entity.Article
-import com.squareup.picasso.Picasso
-import java.text.SimpleDateFormat
 
 class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
     private var listener: ItemListener? = null
@@ -23,12 +23,12 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
     /**
      * 头部
      */
-    private var headers: List<View> = ArrayList()
+    private var headers: List<ViewDataBinding> = ArrayList()
 
     /**
      * 尾部
      */
-    private var footers: List<View> = ArrayList()
+    private var footers: List<ViewDataBinding> = ArrayList()
 
     /**
      * 添加监听器
@@ -40,7 +40,7 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
     /**
      * 添加头
      */
-    fun addHeader(view: View) {
+    fun addHeader(view: ViewDataBinding) {
         headers += view
         //更新视图
         this.notifyItemChanged(this.headers.size - 1)
@@ -49,7 +49,7 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
     /**
      * 添加尾部
      */
-    fun addFooter(view: View) {
+    fun addFooter(view: ViewDataBinding) {
         footers += view
         //更新视图
         this.notifyItemChanged(this.headers.size + this.articles.size + this.footers.size - 1)
@@ -106,15 +106,9 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
         }
 
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.list_item, parent, false)
-        //如果监听器存在，则监听当前view的点击事件
-        if (listener != null) {
-            view.setOnClickListener {
-                val pos = viewType - this.headers.size
-                listener!!.onItemClick(it, articles[pos],viewType)
-            }
-        }
-        return ArticleViewHolder(view)
+        val binding = DataBindingUtil.inflate<ListItemBinding>(inflater, R.layout.list_item, parent, false)
+
+        return ArticleViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -127,42 +121,9 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
     }
 
 
-    class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ArticleViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindArticle(article: Article) {
-            //获取view
-            val poster = itemView.findViewById<ImageView>(R.id.list_item_poster)
-//            val avatar = itemView.findViewById<CircleImageView>(R.id.list_item_author_avatar)
-//            val nickname = itemView.findViewById<TextView>(R.id.list_item_author_nickname)
-            val title = itemView.findViewById<TextView>(R.id.list_item_title)
-            val summary = itemView.findViewById<TextView>(R.id.list_item_summary)
-            val createDate = itemView.findViewById<TextView>(R.id.list_item_createDate)
-            val readNum = itemView.findViewById<TextView>(R.id.list_item_readNum)
-            val praiseNum = itemView.findViewById<TextView>(R.id.list_item_praiseNum)
-            val categoryName = itemView.findViewById<TextView>(R.id.list_item_category_name)
-            //设置数据
-            //设置图片
-            Picasso.with(itemView.context)
-                    .load(article.poster)
-                    .into(poster)
-            //标题
-            title.text = article.title
-//            //设置昵称
-//            nickname.text = article.author!!.nickname
-//            //设置头像
-//            Picasso.with(itemView.context)
-//                    .load(article.author!!.avatar)
-//                    .into(avatar)
-
-            //概要
-            summary.text = article.summary
-
-            //发表时间
-            val date = article.createDate
-            val dataStr = SimpleDateFormat("yyyy/MM/dd HH:mm").format(date)
-            createDate.text = dataStr
-            praiseNum.text = article.praiseNum.toString()
-            readNum.text = article.readNum.toString()
-            categoryName.text = article.category!!.name
+            binding.setVariable(BR.article, article)
         }
 
 
@@ -178,7 +139,7 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
          * [article] 对应的文章
          * [position] 该view在列表中的位置
          */
-        fun onItemClick(view: View, article: Article,position:Int)
+        fun onItemClick(view: View, article: Article, position: Int)
     }
 
 }

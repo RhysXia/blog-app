@@ -5,9 +5,8 @@
     <data>
 
         <variable
-                name="articleListItem"
+                name="article"
                 type="cn.ryths.blog.app.entity.Article"/>
-        <import type="java.text.SimpleDateFormat"/>
     </data>
 
     <LinearLayout
@@ -23,7 +22,7 @@
                 android:layout_width="85dp"
                 android:layout_height="85dp"
                 android:scaleType="fitXY"
-                app:loadImage="@{articleListItem.poster}"/>
+                app:loadImage="@{article.poster}"/>
 
         <RelativeLayout
                 android:layout_width="match_parent"
@@ -38,7 +37,7 @@
                     android:textStyle="bold"
                     android:lines="1"
                     android:ellipsize="end"
-                    android:text="@{articleListItem.title}"/>
+                    android:text="@{article.title}"/>
 
             <TextView
                     android:id="@+id/list_item_summary"
@@ -50,7 +49,7 @@
                     android:layout_below="@+id/list_item_title"
                     android:lines="2"
                     android:ellipsize="end"
-                    android:text="@{articleListItem.summary}"/>
+                    android:text="@{article.summary}"/>
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -68,7 +67,7 @@
                         android:drawableStart="@drawable/ic_time_small"
                         android:drawablePadding="5dp"
                         android:textSize="12sp"
-                        android:text='@{articleListItem.createDate}'/>
+                        android:text='@{article.createDate}'/>
 
                 <TextView
                         android:id="@+id/list_item_readNum"
@@ -78,7 +77,7 @@
                         android:drawableStart="@drawable/ic_read_small"
                         android:drawablePadding="5dp"
                         android:textSize="12sp"
-                        android:text='@{articleListItem.readNum + ""}'/>
+                        android:text='@{article.readNum + ""}'/>
 
                 <TextView
                         android:id="@+id/list_item_praiseNum"
@@ -88,7 +87,7 @@
                         android:drawableStart="@drawable/ic_praise_small"
                         android:drawablePadding="5dp"
                         android:textSize="12sp"
-                        android:text='@{articleListItem.praiseNum + ""}'/>
+                        android:text='@{article.praiseNum + ""}'/>
 
                 <TextView
                         android:id="@+id/list_item_category_name"
@@ -98,7 +97,7 @@
                         android:drawableStart="@drawable/ic_category_small"
                         android:drawablePadding="5dp"
                         android:textSize="12sp"
-                        android:text="@{articleListItem.category.name}"/>
+                        android:text="@{article.category.name}"/>
             </LinearLayout>
         </RelativeLayout>
 
