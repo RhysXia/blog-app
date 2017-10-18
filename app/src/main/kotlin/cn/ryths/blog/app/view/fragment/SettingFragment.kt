@@ -9,10 +9,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.entity.User
-import cn.ryths.blog.app.presenter.PresenterCallback
-import cn.ryths.blog.app.presenter.UserPresenter
+import cn.ryths.blog.app.service.ServiceCallback
+import cn.ryths.blog.app.service.UserService
 import cn.ryths.blog.app.utils.TokenUtils
-import cn.ryths.blog.app.view.fragment.LoginDialogFragment
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -21,7 +20,7 @@ class SettingFragment : Fragment() {
     private lateinit var loginView: View
     private lateinit var container: View
     private var loginDialogFragment: LoginDialogFragment? = null
-    private val userPresenter = UserPresenter()
+    private val userPresenter = UserService()
     override fun onCreateView(inflater: LayoutInflater, _container: ViewGroup?, savedInstanceState: Bundle?): View {
         container = inflater.inflate(R.layout.fragment_setting, _container, false)
         loginView = inflater.inflate(R.layout.fragment_dialog_login, _container, false)
@@ -63,7 +62,7 @@ class SettingFragment : Fragment() {
     private fun loginSuccess() {
         notLoginContainer.visibility = View.GONE
         loginContainer.visibility = View.VISIBLE
-        userPresenter.getSelf(object : PresenterCallback<User, String> {
+        userPresenter.getSelf(object : ServiceCallback<User, String> {
             override fun success(result: User) {
                 Picasso.with(this@SettingFragment.view.context)
                         .load(result.avatar)

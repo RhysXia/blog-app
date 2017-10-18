@@ -9,8 +9,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import cn.ryths.blog.app.R
-import cn.ryths.blog.app.presenter.PresenterCallback
-import cn.ryths.blog.app.presenter.UserPresenter
+import cn.ryths.blog.app.service.ServiceCallback
+import cn.ryths.blog.app.service.UserService
 import cn.ryths.blog.app.utils.TokenUtils
 
 /**
@@ -22,10 +22,10 @@ class LoginDialogFragment : DialogFragment() {
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
 
-    private var userPresenter: UserPresenter? = null
+    private var userService: UserService? = null
 
-    fun setUserPresenter(userPresenter: UserPresenter) {
-        this.userPresenter = userPresenter
+    fun setUserPresenter(userService: UserService) {
+        this.userService = userService
     }
 
     private var listener: Listener? = null
@@ -70,7 +70,7 @@ class LoginDialogFragment : DialogFragment() {
         submitBtn.setOnClickListener {
             val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
-            userPresenter!!.login(username, password, object : PresenterCallback<String, String> {
+            userService!!.login(username, password, object : ServiceCallback<String, String> {
                 //登录成功时，
                 override fun success(result: String) {
                     TokenUtils.saveToken(activity, result)

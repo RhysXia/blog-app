@@ -14,15 +14,15 @@ import android.widget.TextView
 import android.widget.Toast
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.entity.Article
-import cn.ryths.blog.app.presenter.ArticlePresenter
-import cn.ryths.blog.app.presenter.PresenterCallback
+import cn.ryths.blog.app.service.ArticleService
+import cn.ryths.blog.app.service.ServiceCallback
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ArticleFragment : Fragment() {
 
 
-    private lateinit var articlePresenter: ArticlePresenter
+    private lateinit var articleService: ArticleService
 
     private lateinit var toolbar: Toolbar
 
@@ -44,7 +44,7 @@ class ArticleFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_article_info, container, false)
 
         //实例化articlePresenter
-        articlePresenter = ArticlePresenter()
+        articleService = ArticleService()
 
         toolbar = view.findViewById(R.id.article_info_toolbar)
         authorAvatar = view.findViewById(R.id.article_info_author_avatar)
@@ -75,7 +75,7 @@ class ArticleFragment : Fragment() {
         }
         //为点赞按钮添加点击事件
         praise.setOnClickListener {
-            articlePresenter.praise(articleId,object:PresenterCallback<Void?,Void?>{
+            articleService.praise(articleId,object: ServiceCallback<Void?,Void?>{
                 override fun success(result: Void?) {
                     //button点亮
                     //TODO button点亮
@@ -93,7 +93,7 @@ class ArticleFragment : Fragment() {
      * 获取文章
      */
     private fun getArticle() {
-        articlePresenter.findById(articleId, object : PresenterCallback<Article?, Void?> {
+        articleService.findById(articleId, object : ServiceCallback<Article?, Void?> {
             override fun success(result: Article?) {
                 //result为null说明当前文章不存在，此时给出提示，同时返回前一页
                 if (result == null) {

@@ -1,27 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
-
-    <include layout="@layout/common_search"/>
-
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/index_refreshLayout"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+                name="listViewModel"
+                type="cn.ryths.blog.app.view.fragment.IndexFragment.ListViewModel"/>
+        <import type="me.tatarka.bindingcollectionadapter2.LayoutManagers"/>
+    </data>
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+        <include layout="@layout/common_search"/>
 
-        <android.support.v7.widget.RecyclerView
-                android:id="@+id/index_recyclerView"
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/index_refreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
 
-        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-</LinearLayout>
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/index_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:items="@{listViewModel.items}"
+                    app:itemBinding="@{listViewModel.itemBinding}"
+                    app:layoutManager="@{LayoutManagers.linear()}"/>
+
+            <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </LinearLayout>
+</layout>

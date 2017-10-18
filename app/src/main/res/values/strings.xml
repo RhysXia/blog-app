@@ -1,6 +1,3 @@
 <resources>
     <string name="app_name">Blog</string>
-
-    <!-- TODO: Remove or changeToRegisterBtn this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragments</string>
 </resources>

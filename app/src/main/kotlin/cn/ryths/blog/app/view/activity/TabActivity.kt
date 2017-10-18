@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.databinding.ActivityTabBinding
+import cn.ryths.blog.app.service.ArticleService
 import cn.ryths.blog.app.view.fragment.CategoryFragment
 import cn.ryths.blog.app.view.fragment.IndexFragment
 import cn.ryths.blog.app.view.fragment.SettingFragment
@@ -15,6 +16,9 @@ import cn.ryths.blog.app.view.fragment.SettingFragment
 class TabActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTabBinding
+
+    private val articleService = ArticleService()
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_tab)
@@ -33,7 +37,7 @@ class TabActivity : AppCompatActivity() {
         /**
          * 标记当前激活的tab
          */
-        var activeTab: ObservableInt = ObservableInt(-1)
+        val activeTab: ObservableInt = ObservableInt(-1)
 
         /**
          * 初始化
@@ -44,7 +48,7 @@ class TabActivity : AppCompatActivity() {
             val transaction = fragmentManager.beginTransaction()
             var fragment = fragmentMap[Tab_Index]
             if (fragment == null) {
-                fragment = IndexFragment()
+                fragment = IndexFragment.newInstance(articleService)
                 fragmentMap += (Tab_Index to fragment)
                 transaction.add(R.id.fragment_tab, fragment)
             }

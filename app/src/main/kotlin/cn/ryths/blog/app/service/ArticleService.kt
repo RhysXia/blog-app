@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.presenter
+package cn.ryths.blog.app.service
 
 import cn.ryths.blog.app.api.Api
 import cn.ryths.blog.app.api.ArticleApi
@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 /**
  * 文章数据提供类
  */
-class ArticlePresenter {
+class ArticleService {
 
 
     /**
@@ -23,7 +23,7 @@ class ArticlePresenter {
     /**
      * 获取文章列表
      */
-    fun findAll(currentPage: Int, pageSize: Int, callback: PresenterCallback<Result<List<Article>>, Void?>) {
+    fun findAll(currentPage: Int, pageSize: Int, callback: ServiceCallback<Result<List<Article>>, Void?>) {
         articleApi.findAll(currentPage, pageSize, true, true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -42,7 +42,7 @@ class ArticlePresenter {
     /**
      * 获取推荐文章列表
      */
-    fun findAllRecommendation(currentPage: Int, pageSize: Int, callback: PresenterCallback<Result<List<Article>>, Void?>) {
+    fun findAllRecommendation(currentPage: Int, pageSize: Int, callback: ServiceCallback<Result<List<Article>>, Void?>) {
         articleApi.findAllRecommendation(currentPage, pageSize, false, false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -61,7 +61,7 @@ class ArticlePresenter {
     /**
      * 获取指定文章
      */
-    fun findById(id: Long, callback: PresenterCallback<Article?, Void?>) {
+    fun findById(id: Long, callback: ServiceCallback<Article?, Void?>) {
         articleApi.findById(id, true, true, true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -77,7 +77,7 @@ class ArticlePresenter {
     /**
      * 点赞
      */
-    fun praise(id: Long, callback: PresenterCallback<Void?, Void?>) {
+    fun praise(id: Long, callback: ServiceCallback<Void?, Void?>) {
         articleApi.praise(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
