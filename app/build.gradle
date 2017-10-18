@@ -57,6 +57,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     testCompile 'junit:junit:4.12'
+    compile 'com.youth.banner:banner:1.4.10'
     kapt 'com.android.databinding:compiler:2.3.0'
 }
 repositories {
