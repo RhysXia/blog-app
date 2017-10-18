@@ -1,9 +1,8 @@
 package cn.ryths.blog.app.view.tab
 
 import android.app.Fragment
-import android.databinding.BaseObservable
-import android.databinding.Bindable
 import android.databinding.DataBindingUtil
+import android.databinding.ObservableInt
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -24,7 +23,7 @@ class TabActivity : AppCompatActivity() {
     }
 
 
-    inner class ViewModel : BaseObservable() {
+    inner class ViewModel {
         private var fragmentMap: Map<Int, Fragment> = HashMap()
         /**
          * 标记每个tab按键
@@ -35,19 +34,14 @@ class TabActivity : AppCompatActivity() {
         /**
          * 标记当前激活的tab
          */
-        private var activeTab = -1
-
-        @Bindable
-        fun getActiveTab(): Int {
-            return activeTab
-        }
+        var activeTab: ObservableInt = ObservableInt(-1)
 
         /**
          * 初始化
          */
         init {
             //默认激活第一个视图
-            activeTab = Tab_Index
+            activeTab.set(Tab_Index)
             val transaction = fragmentManager.beginTransaction()
             var fragment = fragmentMap[Tab_Index]
             if (fragment == null) {
@@ -62,22 +56,16 @@ class TabActivity : AppCompatActivity() {
         /**
          * tab点击事件
          */
-        fun tabClick(button: View, index: Int) {
+        fun tabClick(index: Int) {
             //如果点击的是激活的tab，不做反应
-            if (index == activeTab) {
+            if (index == activeTab.get()) {
                 return
             }
-//            button as Button
-//            activeBtn.compoundDrawables[1]
-//                    .setTint(resources.getColor(R.color.primary_text))
-//            button.compoundDrawables[1]
-//                    .setTint(resources.getColor(R.color.primary))
-//            activeBtn = button
             val transaction = fragmentManager.beginTransaction()
             //隐藏当前激活的fragment
-            transaction.hide(fragmentMap[activeTab])
+            transaction.hide(fragmentMap[activeTab.get()])
             //设置激活的tab
-            activeTab = index
+            activeTab.set(index)
             //从fragmentMap中查找指定的fragment
             var fragment: Fragment? = fragmentMap[index]
             //不存在时就创建，并加入到fragmentMap中

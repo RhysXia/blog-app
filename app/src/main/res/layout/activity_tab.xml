@@ -37,11 +37,11 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    android:text='@{viewModel.activeTab+""}'
+                    android:text='首页'
                     android:drawableTop="@drawable/ic_tab_index"
                     android:background="@android:color/transparent"
-                    android:onClick="@{(view)->viewModel.tabClick(view,viewModel.Tab_Index)}"
-                    app:drawableTopTint="@{viewModel.activeTab == viewModel.Tab_Index ? @color/primary : @color/primary_text}"/>
+                    android:onClick="@{()->viewModel.tabClick(viewModel.Tab_Index)}"
+                    app:drawableIconTint="@{viewModel.activeTab == viewModel.Tab_Index ? @color/primary : @color/primary_text}"/>
 
 
             <Button
@@ -52,8 +52,8 @@
                     android:text="分类"
                     android:drawableTop="@drawable/ic_tab_category"
                     android:background="@android:color/transparent"
-                    android:onClick="@{(view)->viewModel.tabClick(view,viewModel.Tab_Category)}"
-                    app:drawableTopTint="@{viewModel.activeTab == viewModel.Tab_Category ? @color/primary : @color/primary_text}"/>
+                    android:onClick="@{()->viewModel.tabClick(viewModel.Tab_Category)}"
+                    app:drawableIconTint="@{viewModel.activeTab == viewModel.Tab_Category ? @color/primary : @color/primary_text}"/>
 
 
             <Button
@@ -64,8 +64,8 @@
                     android:text="更多"
                     android:drawableTop="@drawable/ic_tab_setting"
                     android:background="@android:color/transparent"
-                    android:onClick="@{(view)->viewModel.tabClick(view,viewModel.Tab_Setting)}"
-                    app:drawableTopTint="@{viewModel.activeTab == viewModel.Tab_Setting ? @color/primary : @color/primary_text}"/>
+                    android:onClick="@{()->viewModel.tabClick(viewModel.Tab_Setting)}"
+                    app:drawableIconTint="@{viewModel.activeTab == viewModel.Tab_Setting ? @color/primary : @color/primary_text}"/>
         </LinearLayout>
     </LinearLayout>
 </layout>
