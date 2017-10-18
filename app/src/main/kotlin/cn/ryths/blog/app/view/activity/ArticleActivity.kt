@@ -1,9 +1,9 @@
-package cn.ryths.blog.app.view.article
+package cn.ryths.blog.app.view.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import cn.ryths.blog.app.R
-import cn.ryths.blog.app.view.article.article.ArticleFragment
+import cn.ryths.blog.app.view.fragment.ArticleFragment
 
 class ArticleActivity : AppCompatActivity() {
 

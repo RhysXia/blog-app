@@ -7,13 +7,13 @@
 
         <variable
                 name="viewModel"
-                type="cn.ryths.blog.app.view.tab.TabActivity.ViewModel"/>
+                type="cn.ryths.blog.app.view.activity.TabActivity.ViewModel"/>
     </data>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".view.tab.TabActivity"
+            tools:context=".view.activity.TabActivity"
             android:orientation="vertical">
 
         <FrameLayout
@@ -32,7 +32,6 @@
                 android:gravity="center_vertical">
 
             <Button
-                    android:id="@+id/tab_index"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"

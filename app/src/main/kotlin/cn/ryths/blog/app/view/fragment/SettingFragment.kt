@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.view.tab.setting
+package cn.ryths.blog.app.view.fragment
 
 import android.app.Fragment
 import android.os.Bundle
@@ -12,6 +12,7 @@ import cn.ryths.blog.app.entity.User
 import cn.ryths.blog.app.presenter.PresenterCallback
 import cn.ryths.blog.app.presenter.UserPresenter
 import cn.ryths.blog.app.utils.TokenUtils
+import cn.ryths.blog.app.view.fragment.LoginDialogFragment
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 

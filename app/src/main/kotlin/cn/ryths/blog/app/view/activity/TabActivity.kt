@@ -1,16 +1,15 @@
-package cn.ryths.blog.app.view.tab
+package cn.ryths.blog.app.view.activity
 
 import android.app.Fragment
 import android.databinding.DataBindingUtil
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.databinding.ActivityTabBinding
-import cn.ryths.blog.app.view.tab.category.CategoryFragment
-import cn.ryths.blog.app.view.tab.index.IndexFragment
-import cn.ryths.blog.app.view.tab.setting.SettingFragment
+import cn.ryths.blog.app.view.fragment.CategoryFragment
+import cn.ryths.blog.app.view.fragment.IndexFragment
+import cn.ryths.blog.app.view.fragment.SettingFragment
 
 
 class TabActivity : AppCompatActivity() {

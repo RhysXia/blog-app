@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.view.tab.index
+package cn.ryths.blog.app.view.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

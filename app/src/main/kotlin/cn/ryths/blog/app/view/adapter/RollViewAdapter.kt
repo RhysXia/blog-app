@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.view.tab.index
+package cn.ryths.blog.app.view.adapter
 
 import android.view.LayoutInflater
 import android.view.View

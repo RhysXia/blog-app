@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.view.tab.setting
+package cn.ryths.blog.app.view.fragment
 
 import android.app.DialogFragment
 import android.os.Bundle

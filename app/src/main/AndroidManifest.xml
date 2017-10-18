@@ -12,14 +12,14 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:name=".BaseApplication">
-        <activity android:name="cn.ryths.blog.app.view.tab.TabActivity">
+        <activity android:name="cn.ryths.blog.app.view.activity.TabActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".view.article.ArticleActivity">
+        <activity android:name=".view.activity.ArticleActivity">
         </activity>
     </application>
 

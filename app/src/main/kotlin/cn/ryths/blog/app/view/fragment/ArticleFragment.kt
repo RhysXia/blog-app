@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.view.article.article
+package cn.ryths.blog.app.view.fragment
 
 import android.app.Fragment
 import android.os.Bundle

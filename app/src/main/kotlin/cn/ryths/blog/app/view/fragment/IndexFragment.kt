@@ -1,4 +1,4 @@
-package cn.ryths.blog.app.view.tab.index
+package cn.ryths.blog.app.view.fragment
 
 import android.app.Fragment
 import android.content.Intent
@@ -14,7 +14,9 @@ import cn.ryths.blog.app.entity.Article
 import cn.ryths.blog.app.entity.Result
 import cn.ryths.blog.app.presenter.ArticlePresenter
 import cn.ryths.blog.app.presenter.PresenterCallback
-import cn.ryths.blog.app.view.article.ArticleActivity
+import cn.ryths.blog.app.view.activity.ArticleActivity
+import cn.ryths.blog.app.view.adapter.ArticleListAdapter
+import cn.ryths.blog.app.view.adapter.RollViewAdapter
 import com.jude.rollviewpager.RollPagerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 
