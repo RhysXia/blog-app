@@ -68,7 +68,6 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
      * 重新设置文章列表
      */
     fun setAll(articles: List<Article>) {
-        val pos = this.headers.size + this.articles.size
         this.articles = articles
         //更新视图
         this.notifyDataSetChanged()
@@ -79,7 +78,6 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
      * 清空文章列表
      */
     fun removeAll() {
-        val size = this.articles.size
         this.articles = ArrayList()
         //更新视图
         this.notifyDataSetChanged()
@@ -99,10 +97,10 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
             return ArticleViewHolder(headers[viewType])
         }
 
-        val pos = viewType - this.headers.size - this.articles.size
+        val pos1 = viewType - this.headers.size - this.articles.size
         //如果是尾部
-        if (pos >= 0) {
-            return ArticleViewHolder(footers[pos])
+        if (pos1 >= 0) {
+            return ArticleViewHolder(footers[pos1])
         }
 
         val inflater = LayoutInflater.from(parent.context)
@@ -110,8 +108,8 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
         //如果监听器存在，则监听当前view的点击事件
         if (listener != null) {
             view.setOnClickListener {
-                val pos = viewType - this.headers.size
-                listener!!.onItemClick(it, articles[pos],viewType)
+                val pos2 = viewType - this.headers.size
+                listener!!.onItemClick(it, articles[pos2],viewType)
             }
         }
         return ArticleViewHolder(view)

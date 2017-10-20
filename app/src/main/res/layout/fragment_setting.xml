@@ -1,87 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
-
-    <include layout="@layout/common_search"/>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
-            android:id="@+id/tab_setting_notLoginContainer"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:background="@drawable/border_bottom"
-            android:elevation="5dp">
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="登录之后，体验更多功能"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginTop="20dp"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/tab_setting_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_login"
-                android:layout_marginTop="20dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/tab_setting_loginContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:orientation="vertical">
 
+        <include layout="@layout/common_search"/>
+
         <LinearLayout
+                android:id="@+id/tab_setting_notLoginContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
+                android:layout_height="150dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
                 android:background="@drawable/border_bottom"
-                android:padding="15dp">
+                android:elevation="5dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="登录之后，体验更多功能"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/tab_setting_login_user_avatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"/>
+                    android:id="@+id/tab_setting_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_login"
+                    android:layout_marginTop="20dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/tab_setting_loginContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:orientation="vertical">
 
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginLeft="10dp">
+                    android:background="@drawable/border_bottom"
+                    android:padding="15dp">
 
-                <TextView
-                        android:id="@+id/tab_setting_login_user_nickname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:lines="1"
-                        android:ellipsize="end"/>
+                <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/tab_setting_login_user_avatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"/>
 
-                <TextView
-                        android:id="@+id/tab_setting_login_user_summary"
+                <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:lines="1"
-                        android:ellipsize="end"/>
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="10dp">
+
+                    <TextView
+                            android:id="@+id/tab_setting_login_user_nickname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:ellipsize="end"/>
+
+                    <TextView
+                            android:id="@+id/tab_setting_login_user_summary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:ellipsize="end"/>
+                </LinearLayout>
             </LinearLayout>
+
+            <TextView
+
+                    android:id="@+id/tab_setting_login_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_bottom"
+                    android:text="注销"
+                    android:drawableLeft="@drawable/ic_logout"/>
         </LinearLayout>
 
-        <TextView
-
-                android:id="@+id/tab_setting_login_logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border_bottom"
-                android:text="注销"
-                android:drawableLeft="@drawable/ic_logout"/>
     </LinearLayout>
-
-</LinearLayout>
+</layout>

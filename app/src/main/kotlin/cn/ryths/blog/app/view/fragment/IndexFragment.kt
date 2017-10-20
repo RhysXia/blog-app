@@ -95,7 +95,7 @@ class IndexFragment : Fragment() {
     }
 
     private fun freshOrUpdateList(isAddMore: Boolean) {
-        articleService.findAll(0, 10, object : ServiceCallback<Result<List<Article>>, Void?> {
+        articleService.findAll(currentPage, pageSize, object : ServiceCallback<Result<List<Article>>, Void?> {
             override fun success(result: Result<List<Article>>) {
                 if (isAddMore) articleListAdapter.addAll(result.data!!) else articleListAdapter.setAll(result.data!!)
                 binding.indexRefreshLayout.finishLoadmore()

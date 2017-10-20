@@ -1,8 +1,11 @@
 package cn.ryths.blog.app.view.activity
 
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import cn.ryths.blog.app.R
+import cn.ryths.blog.app.databinding.ActivityArticleBinding
+import cn.ryths.blog.app.service.ArticleService
 import cn.ryths.blog.app.view.fragment.ArticleFragment
 
 class ArticleActivity : AppCompatActivity() {
@@ -13,24 +16,25 @@ class ArticleActivity : AppCompatActivity() {
     private lateinit var articleFragment: ArticleFragment
 
 
+    private lateinit var binding: ActivityArticleBinding
+
+    private lateinit var articleService: ArticleService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_article)
-        articleId = intent.getSerializableExtra("articleId") as Long
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_article)
 
-        //实例化fragment
-        articleFragment = ArticleFragment()
+        articleId = intent.getLongExtra("articleId",0)
 
-        //设置参数
-        val bundle = Bundle()
-        bundle.putLong("articleId", articleId)
-        articleFragment.arguments = bundle
+        articleService = ArticleService()
 
+        val articleFragment = ArticleFragment.newInstance(articleService, articleId)
 
-        //显示文章
         val transaction = fragmentManager.beginTransaction()
-        transaction.add(R.id.fragment_article, articleFragment, "fragment0")
+
+        transaction.add(R.id.fragment_article, articleFragment)
         transaction.show(articleFragment)
         transaction.commit()
+
     }
 }
