@@ -5,8 +5,12 @@
     <data>
 
         <variable
-                name="article"
-                type="cn.ryths.blog.app.entity.Article"/>
+                name="viewModel"
+                type="cn.ryths.blog.app.view.fragment.ArticleFragment.ViewModel"/>
+
+        <variable
+                name="globalViewModel"
+                type="cn.ryths.blog.app.view.viewModel.GlobalViewModel"/>
     </data>
 
     <LinearLayout
@@ -21,7 +25,7 @@
                 android:background="@color/primary"
                 app:navigationIcon="@drawable/ic_back"
                 app:titleTextColor="@android:color/white"
-                app:title="@{article.title}">
+                app:title="@{viewModel.article.title}">
         </android.support.v7.widget.Toolbar>
         <!--作者信息-->
         <LinearLayout
@@ -38,7 +42,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    app:loadImage="@{article.author.avatar}"/>
+                    app:loadImage="@{viewModel.article.author.avatar}"/>
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -50,7 +54,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:text="@{article.author.nickname}"/>
+                        android:text="@{viewModel.article.author.nickname}"/>
 
                 <TextView
                         android:layout_width="match_parent"
@@ -59,7 +63,7 @@
                         android:textColor="@color/secondary_text"
                         android:lines="2"
                         android:ellipsize="end"
-                        android:text="@{article.author.summary}"/>
+                        android:text="@{viewModel.article.author.summary}"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -78,7 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:scaleType="fitXY"
-                        app:loadImage="@{article.poster}"/>
+                        app:loadImage="@{viewModel.article.poster}"/>
                 <!--文章内容-->
                 <WebView
                         android:id="@+id/fragment_article_content"
@@ -95,18 +99,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/border_top"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:padding="2dp"
+                android:paddingStart="10dp">
 
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_praise"
-                    />
+                    android:text='@{viewModel.article.praiseNum == null ? "0" : (viewModel.article.praiseNum+ "")}'
+                    android:background="@android:color/transparent"
+                    android:onClick="@{()->viewModel.praiseClick()}"/>
 
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    />
+                    android:drawableStart="@drawable/ic_comment"
+                    android:text="评论"
+                    android:background="@android:color/transparent"
+                    android:onClick="@{()->viewModel.commentClick()}"/>
         </LinearLayout>
     </LinearLayout>
 </layout>
