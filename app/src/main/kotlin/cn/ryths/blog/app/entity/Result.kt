@@ -1,5 +1,7 @@
 package cn.ryths.blog.app.entity
 
+import com.google.gson.annotations.SerializedName
+
 data class Result<T>(
         var code: Code = Code.SUCCESS,
         var data: T? = null,
@@ -8,7 +10,10 @@ data class Result<T>(
 )
 
 enum class Code {
-    SUCCESS, FAIL
+    @SerializedName("0")
+    SUCCESS,
+    @SerializedName("1")
+    FAIL
 }
 
 data class Pagination(
