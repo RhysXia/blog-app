@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+                name="viewModel"
+                type="cn.ryths.blog.app.view.fragment.SettingFragment.ViewModel"/>
+
+        <variable
+                name="globalViewModel"
+                type="cn.ryths.blog.app.view.viewModel.GlobalViewModel"/>
+
+        <import type="android.view.View"/>
+    </data>
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -9,13 +23,13 @@
         <include layout="@layout/common_search"/>
 
         <LinearLayout
-                android:id="@+id/tab_setting_notLoginContainer"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
                 android:background="@drawable/border_bottom"
-                android:elevation="5dp">
+                android:elevation="3dp"
+                android:visibility="@{globalViewModel.login ? View.GONE : View.VISIBLE}">
 
             <TextView
                     android:layout_width="wrap_content"
@@ -30,15 +44,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_login"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp"
+                    android:onClick="@{()->viewModel.loginClick()}"/>
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/tab_setting_loginContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:visibility="@{!globalViewModel.login ? View.GONE : View.VISIBLE}"
+                android:orientation="vertical"
+                >
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -46,12 +61,13 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:background="@drawable/border_bottom"
-                    android:padding="15dp">
+                    android:padding="15dp"
+                    android:elevation="3dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/tab_setting_login_user_avatar"
                         android:layout_width="40dp"
-                        android:layout_height="40dp"/>
+                        android:layout_height="40dp"
+                        app:loadImage="@{globalViewModel.user.avatar}"/>
 
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -61,29 +77,33 @@
                         android:layout_marginLeft="10dp">
 
                     <TextView
-                            android:id="@+id/tab_setting_login_user_nickname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:lines="1"
-                            android:ellipsize="end"/>
+                            android:ellipsize="end"
+                            android:text="@{globalViewModel.user.nickname}"/>
 
                     <TextView
-                            android:id="@+id/tab_setting_login_user_summary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:lines="1"
-                            android:ellipsize="end"/>
+                            android:ellipsize="end"
+                            android:text="@{globalViewModel.user.summary}"/>
                 </LinearLayout>
             </LinearLayout>
 
             <TextView
-
+                    android:visibility="@{!globalViewModel.login ? View.GONE : View.VISIBLE}"
                     android:id="@+id/tab_setting_login_logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border_bottom"
                     android:text="注销"
-                    android:drawableLeft="@drawable/ic_logout"/>
+                    android:drawableLeft="@drawable/ic_logout"
+                    android:height="50dp"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:elevation="3dp"/>
         </LinearLayout>
 
     </LinearLayout>

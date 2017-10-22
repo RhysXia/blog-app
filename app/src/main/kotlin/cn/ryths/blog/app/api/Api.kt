@@ -1,5 +1,6 @@
 package cn.ryths.blog.app.api
 
+import android.util.Log
 import cn.ryths.blog.app.BaseApplication
 import cn.ryths.blog.app.utils.TokenUtils
 import com.google.gson.GsonBuilder
@@ -37,7 +38,9 @@ object Api {
                                 .newBuilder()
                                 .addHeader("Authorization", token)
                                 .build()
+                        Log.d("http request","url:${request.url().uri().toASCIIString()}")
                         it.proceed(request)
+
                     }
                     .build()
             builder.client(okhttp)

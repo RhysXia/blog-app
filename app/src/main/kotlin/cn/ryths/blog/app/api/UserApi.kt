@@ -21,4 +21,7 @@ interface UserApi {
 
     @GET("/users/self")
     fun getSelf(): Observable<Result<User>>
+
+    @GET("/token/check")
+    fun checkToken():Observable<Result<Boolean>>
 }

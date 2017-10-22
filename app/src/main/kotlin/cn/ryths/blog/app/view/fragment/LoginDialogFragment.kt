@@ -1,14 +1,14 @@
 package cn.ryths.blog.app.view.fragment
 
 import android.app.DialogFragment
+import android.databinding.DataBindingUtil
+import android.databinding.ObservableField
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import cn.ryths.blog.app.R
+import cn.ryths.blog.app.databinding.FragmentDialogLoginBinding
 import cn.ryths.blog.app.service.ServiceCallback
 import cn.ryths.blog.app.service.UserService
 import cn.ryths.blog.app.utils.TokenUtils
@@ -18,79 +18,51 @@ import cn.ryths.blog.app.utils.TokenUtils
  */
 class LoginDialogFragment : DialogFragment() {
 
-    private lateinit var title: TextView
-    private lateinit var usernameEditText: EditText
-    private lateinit var passwordEditText: EditText
-
-    private var userService: UserService? = null
-
-    fun setUserPresenter(userService: UserService) {
-        this.userService = userService
-    }
-
-    private var listener: Listener? = null
-
-    fun setListener(listener: Listener) {
-        this.listener = listener
-    }
-
-    private lateinit var dialog: View
-    /**
-     * 登录或注册
-     */
-    private lateinit var submitBtn: Button
-    /**
-     * 切换登录注册
-     */
-    private lateinit var changeToRegisterBtn: Button
+    private lateinit var binding: FragmentDialogLoginBinding
+    private lateinit var userService: UserService
+    private lateinit var listener: Listener
 
 
-    private lateinit var errorLabel: TextView
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        dialog = inflater.inflate(R.layout.fragment_dialog_login, container, false)
-
-        title = dialog.findViewById(R.id.fragment_dialog_login_title)
-        usernameEditText = dialog.findViewById(R.id.fragment_dialog_login_username)
-        errorLabel = dialog.findViewById(R.id.fragment_dialog_login_errorLabel)
-        passwordEditText = dialog.findViewById(R.id.fragment_dialog_login_password)
-        submitBtn = dialog.findViewById(R.id.fragment_dialog_login_submit)
-        changeToRegisterBtn = dialog.findViewById(R.id.fragment_dialog_login_changeToRegister)
-        initEvent()
-        return dialog
-    }
-
-    private fun initEvent() {
-        //切换登录注册事件
-        changeToRegisterBtn.setOnClickListener {
-
-        }
-        //登录事件
-        submitBtn.setOnClickListener {
-            val username = usernameEditText.text.toString()
-            val password = passwordEditText.text.toString()
-            userService!!.login(username, password, object : ServiceCallback<String, String> {
-                //登录成功时，
-                override fun success(result: String) {
-                    TokenUtils.saveToken(activity, result)
-                    val transaction = this@LoginDialogFragment.fragmentManager.beginTransaction()
-                    transaction.remove(this@LoginDialogFragment)
-                    transaction.commit()
-                    if (listener != null) {
-                        listener!!.onLoginSuccess()
-                    }
-                }
-
-                override fun fail(error: String) {
-                    errorLabel.text = error
-                    errorLabel.visibility = View.VISIBLE
-                }
-            })
+    companion object {
+        fun newInstance(userService: UserService, listener: Listener): LoginDialogFragment {
+            val fragment = LoginDialogFragment()
+            fragment.userService = userService
+            fragment.listener = listener
+            return fragment
         }
     }
+
+    override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dialog_login, parent, false)
+
+
+        binding.viewModel = ViewModel()
+        return binding.root
+    }
+
 
     interface Listener {
         fun onLoginSuccess()
+    }
+
+    inner class ViewModel {
+        val username: ObservableField<String> = ObservableField("")
+        val password: ObservableField<String> = ObservableField("")
+        val error: ObservableField<String> = ObservableField("")
+
+        fun loginClick() {
+            userService.login(username = username.get(), password = password.get(), callback = object : ServiceCallback<String, String> {
+                override fun success(token: String) {
+                    TokenUtils.saveToken(activity, token)
+                    this@LoginDialogFragment.dialog.hide()
+                    listener.onLoginSuccess()
+                }
+
+                override fun fail(error: String) {
+                    this@ViewModel.error.set(error)
+                }
+
+            })
+        }
     }
 }

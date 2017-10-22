@@ -27,11 +27,11 @@ class UserService {
                         callback.fail(it.message!!)
                     }
                 }, Consumer<Throwable> {
-                    callback.fail("用户名密码有误")
+                    callback.fail("网络有问题")
                 })
     }
 
-    fun getSelf(callback: ServiceCallback<User, String>){
+    fun getSelf(callback: ServiceCallback<User, String>) {
         userApi.getSelf()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -42,7 +42,22 @@ class UserService {
                         callback.fail(it.message!!)
                     }
                 }, Consumer<Throwable> {
-                    callback.fail("用户名密码有误")
+                    callback.fail("网络有问题")
+                })
+    }
+
+    fun checkToken(callback: ServiceCallback<Boolean, String>) {
+        userApi.checkToken()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(Consumer<Result<Boolean>> {
+                    if (it.code == Code.SUCCESS) {
+                        callback.success(it.data!!)
+                    } else {
+                        callback.fail(it.message!!)
+                    }
+                }, Consumer<Throwable> {
+                    callback.fail("网络有问题")
                 })
     }
 }

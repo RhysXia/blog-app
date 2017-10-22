@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.databinding.ActivityTabBinding
 import cn.ryths.blog.app.service.ArticleService
+import cn.ryths.blog.app.service.UserService
 import cn.ryths.blog.app.view.fragment.CategoryFragment
 import cn.ryths.blog.app.view.fragment.IndexFragment
 import cn.ryths.blog.app.view.fragment.SettingFragment
@@ -18,6 +19,7 @@ class TabActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTabBinding
 
     private val articleService = ArticleService()
+    private val userService = UserService()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,13 +77,13 @@ class TabActivity : AppCompatActivity() {
             if (fragment == null) {
                 fragment = when (index) {
                     Tab_Index -> {
-                        IndexFragment()
+                        IndexFragment.newInstance(articleService)
                     }
                     Tab_Category -> {
                         CategoryFragment()
                     }
                     else -> {
-                        SettingFragment()
+                        SettingFragment.newInstance(userService)
                     }
                 }
                 fragmentMap += (index to fragment)
