@@ -7,24 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cn.ryths.blog.app.R
+import cn.ryths.blog.app.api.Api
+import cn.ryths.blog.app.api.UserApi
 import cn.ryths.blog.app.databinding.FragmentSettingBinding
-import cn.ryths.blog.app.entity.User
-import cn.ryths.blog.app.service.ServiceCallback
-import cn.ryths.blog.app.service.UserService
+import cn.ryths.blog.app.entity.Code
 import cn.ryths.blog.app.view.viewModel.GlobalViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class SettingFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingBinding
     private var loginDialogFragment: LoginDialogFragment? = null
 
-    private lateinit var userService: UserService
+    private var userApi = Api.newApiInstance(UserApi::class.java)
 
     companion object {
-        fun newInstance(userService: UserService): SettingFragment {
-            val fragment = SettingFragment()
-            fragment.userService = userService
-            return fragment
+        fun newInstance(): SettingFragment {
+            return SettingFragment()
         }
     }
 
@@ -39,18 +39,18 @@ class SettingFragment : Fragment() {
         fun loginClick() {
             val globalViewModel = GlobalViewModel.getInstance()
             if (loginDialogFragment == null) {
-                loginDialogFragment = LoginDialogFragment.newInstance(userService, object : LoginDialogFragment.Listener {
+                loginDialogFragment = LoginDialogFragment.newInstance(object : LoginDialogFragment.Listener {
                     override fun onLoginSuccess() {
                         globalViewModel.login = true
-                        userService.getSelf(object : ServiceCallback<User, String> {
-                            override fun success(result: User) {
-                                globalViewModel.user = result
-                            }
+                        userApi.getSelf()
+                                .observeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    if (it.code == Code.SUCCESS) {
 
-                            override fun fail(error: String) {
-                            }
-
-                        })
+                                        globalViewModel.user = it.data
+                                    }
+                                }, {})
                     }
 
                 })

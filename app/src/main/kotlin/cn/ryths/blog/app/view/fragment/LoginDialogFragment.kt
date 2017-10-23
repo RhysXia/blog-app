@@ -19,14 +19,13 @@ import cn.ryths.blog.app.utils.TokenUtils
 class LoginDialogFragment : DialogFragment() {
 
     private lateinit var binding: FragmentDialogLoginBinding
-    private lateinit var userService: UserService
+    private var userService = UserService()
     private lateinit var listener: Listener
 
 
     companion object {
-        fun newInstance(userService: UserService, listener: Listener): LoginDialogFragment {
+        fun newInstance(listener: Listener): LoginDialogFragment {
             val fragment = LoginDialogFragment()
-            fragment.userService = userService
             fragment.listener = listener
             return fragment
         }
@@ -51,14 +50,14 @@ class LoginDialogFragment : DialogFragment() {
         val error: ObservableField<String> = ObservableField("")
 
         fun loginClick() {
-            userService.login(username = username.get(), password = password.get(), callback = object : ServiceCallback<String, String> {
+            userService.login(username = username.get(), password = password.get(), callback = object : ServiceCallback<String, String?> {
                 override fun success(token: String) {
                     TokenUtils.saveToken(activity, token)
                     this@LoginDialogFragment.dialog.hide()
                     listener.onLoginSuccess()
                 }
 
-                override fun fail(error: String) {
+                override fun fail(error: String?) {
                     this@ViewModel.error.set(error)
                 }
 

@@ -3,10 +3,7 @@ package cn.ryths.blog.app.api
 import cn.ryths.blog.app.entity.Article
 import cn.ryths.blog.app.entity.Result
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ArticleApi {
 
@@ -40,7 +37,19 @@ interface ArticleApi {
     /**
      * 为文章点赞
      */
-    @PUT("/articles/{id}/praise")
+    @POST("/articles/{id}/praise")
     fun praise(@Path("id") id: Long): Observable<Result<Void?>>
+
+    /**
+     * 检查文章是否被点赞
+     */
+    @GET("/articles/{id}/isPraise")
+    fun checkPraise(@Path("id")Id:Long):Observable<Result<Boolean>>
+
+    /**
+     * 取消点赞
+     */
+    @DELETE("/articles/{id}/praise")
+    fun deletPraise(@Path("id") id: Long): Observable<Result<Void?>>
 
 }

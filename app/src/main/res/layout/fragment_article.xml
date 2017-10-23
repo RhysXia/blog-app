@@ -109,7 +109,8 @@
                     android:drawableStart="@drawable/ic_praise"
                     android:text='@{viewModel.article.praiseNum == null ? "0" : (viewModel.article.praiseNum+ "")}'
                     android:background="@android:color/transparent"
-                    android:onClick="@{()->viewModel.praiseClick()}"/>
+                    android:onClick="@{()->viewModel.praiseClick()}"
+                    android:enabled="@{!viewModel.praised}"/>
 
             <Button
                     android:layout_width="wrap_content"

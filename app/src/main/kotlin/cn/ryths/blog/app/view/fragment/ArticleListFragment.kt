@@ -1,35 +1,27 @@
 package cn.ryths.blog.app.view.fragment
 
 import android.app.Fragment
-import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cn.ryths.blog.app.R
+import cn.ryths.blog.app.api.Api
+import cn.ryths.blog.app.api.ArticleApi
 import cn.ryths.blog.app.databinding.FragmentArticleListBinding
 import cn.ryths.blog.app.entity.Article
-import cn.ryths.blog.app.entity.Result
-import cn.ryths.blog.app.service.ArticleService
-import cn.ryths.blog.app.service.ServiceCallback
-import cn.ryths.blog.app.view.activity.ArticleActivity
 import cn.ryths.blog.app.view.adapter.ArticleListAdapter
 import cn.ryths.blog.app.view.adapter.RollViewAdapter
 import com.jude.rollviewpager.RollPagerView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-class IndexFragment : Fragment() {
+class ArticleListFragment : Fragment() {
 
-    private lateinit var articleService: ArticleService
-
-    companion object {
-        fun newInstance(articleService: ArticleService): IndexFragment {
-            val fragment = IndexFragment()
-            fragment.articleService = articleService
-            return fragment
-        }
-    }
+    private val articleApi = Api.newApiInstance(ArticleApi::class.java)
 
     private lateinit var binding: FragmentArticleListBinding
 
@@ -41,6 +33,12 @@ class IndexFragment : Fragment() {
     private lateinit var rollView: RollPagerView
 
     private lateinit var rollViewAdapter: RollViewAdapter
+
+    companion object {
+        fun newInstance(): ArticleListFragment {
+            return ArticleListFragment()
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_list, parent, false)
@@ -89,37 +87,33 @@ class IndexFragment : Fragment() {
     }
 
     private fun gotoInfo(id: Long) {
-        val intent = Intent(activity, ArticleActivity::class.java)
-        intent.putExtra("articleId", id)
-        startActivity(intent)
+        val fragment = ArticleFragment.newInstance(id)
+        val transaction = activity.fragmentManager.beginTransaction()
+        transaction.replace(R.id.main_fragment, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     private fun freshOrUpdateList(isAddMore: Boolean) {
-        articleService.findAll(currentPage, pageSize, object : ServiceCallback<Result<List<Article>>, Void?> {
-            override fun success(result: Result<List<Article>>) {
-                if (isAddMore) articleListAdapter.addAll(result.data!!) else articleListAdapter.setAll(result.data!!)
-                binding.indexRefreshLayout.finishLoadmore()
-                binding.indexRefreshLayout.finishRefresh()
-                //判断当前页是否是最后一页
-                binding.indexRefreshLayout.isEnableLoadmore = (currentPage + 1 <= result.pagination!!.totalPage!!)
-            }
-
-            override fun fail(error: Void?) {
-            }
-
-        })
+        articleApi.findAll(currentPage, pageSize, true, true)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (isAddMore) {
+                        articleListAdapter.addAll(it.data!!)
+                    } else {
+                        articleListAdapter.setAll(it.data!!)
+                    }
+                }, {})
     }
 
     private fun freshRollView() {
-        articleService.findAllRecommendation(0, 5, object : ServiceCallback<Result<List<Article>>, Void?> {
-            override fun success(result: Result<List<Article>>) {
-                rollViewAdapter.setAll(result.data!!)
-            }
-
-            override fun fail(error: Void?) {
-            }
-
-        })
+        articleApi.findAllRecommendation(0, 5, false, false)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    rollViewAdapter.setAll(it.data!!)
+                }, {})
     }
 
 }

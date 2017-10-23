@@ -7,13 +7,13 @@
 
         <variable
                 name="viewModel"
-                type="cn.ryths.blog.app.view.activity.TabActivity.ViewModel"/>
+                type="cn.ryths.blog.app.view.fragment.TabFragment.ViewModel"/>
     </data>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".view.activity.TabActivity"
+            tools:context=".view.activity.MainActivity"
             android:orientation="vertical">
 
         <FrameLayout
@@ -39,8 +39,8 @@
                     android:text='首页'
                     android:drawableTop="@drawable/ic_tab_index"
                     android:background="@android:color/transparent"
-                    android:onClick="@{()->viewModel.tabClick(viewModel.Tab_Index)}"
-                    app:drawableIconTint="@{viewModel.activeTab == viewModel.Tab_Index ? @color/primary : @color/primary_text}"/>
+                    android:onClick="@{()->viewModel.tabClick(viewModel.TAB_INDEX)}"
+                    app:drawableIconTint="@{viewModel.activeTab == viewModel.TAB_INDEX ? @color/primary : @color/primary_text}"/>
 
 
             <Button
@@ -51,8 +51,8 @@
                     android:text="分类"
                     android:drawableTop="@drawable/ic_tab_category"
                     android:background="@android:color/transparent"
-                    android:onClick="@{()->viewModel.tabClick(viewModel.Tab_Category)}"
-                    app:drawableIconTint="@{viewModel.activeTab == viewModel.Tab_Category ? @color/primary : @color/primary_text}"/>
+                    android:onClick="@{()->viewModel.tabClick(viewModel.TAB_CATEGORY)}"
+                    app:drawableIconTint="@{viewModel.activeTab == viewModel.TAB_CATEGORY ? @color/primary : @color/primary_text}"/>
 
 
             <Button
@@ -63,8 +63,8 @@
                     android:text="更多"
                     android:drawableTop="@drawable/ic_tab_setting"
                     android:background="@android:color/transparent"
-                    android:onClick="@{()->viewModel.tabClick(viewModel.Tab_Setting)}"
-                    app:drawableIconTint="@{viewModel.activeTab == viewModel.Tab_Setting ? @color/primary : @color/primary_text}"/>
+                    android:onClick="@{()->viewModel.tabClick(viewModel.TAB_SETTING)}"
+                    app:drawableIconTint="@{viewModel.activeTab == viewModel.TAB_SETTING ? @color/primary : @color/primary_text}"/>
         </LinearLayout>
     </LinearLayout>
 </layout>
