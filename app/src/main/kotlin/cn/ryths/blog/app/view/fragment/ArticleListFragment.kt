@@ -1,10 +1,10 @@
 package cn.ryths.blog.app.view.fragment
 
 import android.app.Fragment
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +13,7 @@ import cn.ryths.blog.app.api.Api
 import cn.ryths.blog.app.api.ArticleApi
 import cn.ryths.blog.app.databinding.FragmentArticleListBinding
 import cn.ryths.blog.app.entity.Article
+import cn.ryths.blog.app.view.activity.ArticleActivity
 import cn.ryths.blog.app.view.adapter.ArticleListAdapter
 import cn.ryths.blog.app.view.adapter.RollViewAdapter
 import com.jude.rollviewpager.RollPagerView
@@ -87,11 +88,9 @@ class ArticleListFragment : Fragment() {
     }
 
     private fun gotoInfo(id: Long) {
-        val fragment = ArticleFragment.newInstance(id)
-        val transaction = activity.fragmentManager.beginTransaction()
-        transaction.replace(R.id.main_fragment, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        val intent = Intent(activity, ArticleActivity::class.java)
+        intent.putExtra("articleId", id)
+        startActivity(intent)
     }
 
     private fun freshOrUpdateList(isAddMore: Boolean) {

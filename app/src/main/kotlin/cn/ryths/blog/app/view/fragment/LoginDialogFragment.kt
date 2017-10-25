@@ -8,10 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cn.ryths.blog.app.R
+import cn.ryths.blog.app.api.Api
+import cn.ryths.blog.app.api.UserApi
 import cn.ryths.blog.app.databinding.FragmentDialogLoginBinding
-import cn.ryths.blog.app.service.ServiceCallback
-import cn.ryths.blog.app.service.UserService
+import cn.ryths.blog.app.entity.Code
+import cn.ryths.blog.app.entity.User
 import cn.ryths.blog.app.utils.TokenUtils
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * 登录注册框
@@ -19,7 +23,7 @@ import cn.ryths.blog.app.utils.TokenUtils
 class LoginDialogFragment : DialogFragment() {
 
     private lateinit var binding: FragmentDialogLoginBinding
-    private var userService = UserService()
+    private var userApi = Api.newApiInstance(UserApi::class.java)
     private lateinit var listener: Listener
 
 
@@ -50,18 +54,25 @@ class LoginDialogFragment : DialogFragment() {
         val error: ObservableField<String> = ObservableField("")
 
         fun loginClick() {
-            userService.login(username = username.get(), password = password.get(), callback = object : ServiceCallback<String, String?> {
-                override fun success(token: String) {
-                    TokenUtils.saveToken(activity, token)
-                    this@LoginDialogFragment.dialog.hide()
-                    listener.onLoginSuccess()
-                }
-
-                override fun fail(error: String?) {
-                    this@ViewModel.error.set(error)
-                }
-
-            })
+            val usernameStr = username.get()
+            val passwordStr = password.get()
+            if (usernameStr.isNullOrBlank() || passwordStr.isNullOrBlank()) {
+                error.set("用户名密码不能为空")
+            }
+            userApi.login(User(username = usernameStr, password = passwordStr))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        if (it.code == Code.SUCCESS) {
+                            TokenUtils.saveToken(activity, it.data!!)
+                            listener.onLoginSuccess()
+                            this@LoginDialogFragment.dialog.hide()
+                        } else {
+                            error.set(it.message)
+                        }
+                    }, {
+                        error.set(it.message)
+                    })
         }
     }
 }

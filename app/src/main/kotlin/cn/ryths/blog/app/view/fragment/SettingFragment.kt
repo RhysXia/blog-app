@@ -11,6 +11,7 @@ import cn.ryths.blog.app.api.Api
 import cn.ryths.blog.app.api.UserApi
 import cn.ryths.blog.app.databinding.FragmentSettingBinding
 import cn.ryths.blog.app.entity.Code
+import cn.ryths.blog.app.utils.TokenUtils
 import cn.ryths.blog.app.view.viewModel.GlobalViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -43,11 +44,10 @@ class SettingFragment : Fragment() {
                     override fun onLoginSuccess() {
                         globalViewModel.login = true
                         userApi.getSelf()
-                                .observeOn(Schedulers.io())
+                                .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
                                     if (it.code == Code.SUCCESS) {
-
                                         globalViewModel.user = it.data
                                     }
                                 }, {})
@@ -57,5 +57,14 @@ class SettingFragment : Fragment() {
             }
             loginDialogFragment!!.show(fragmentManager, "loginDialogFragment")
         }
+
+        fun logoutClick() {
+            //删除token
+            TokenUtils.removeToken(activity)
+            //login置false
+            GlobalViewModel.getInstance().login = false
+            GlobalViewModel.getInstance().user = null
+        }
     }
+
 }

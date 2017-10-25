@@ -1,11 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="comment"/>
-</LinearLayout>
+    <data>
+
+        <variable
+                name="gloableViewModel"
+                type="cn.ryths.blog.app.view.viewModel.GlobalViewModel"/>
+        <variable
+                name="viewModel"
+                type="cn.ryths.blog.app.view.fragment.CommentFragment.ViewModel"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/fragment_comment_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:navigationIcon="@drawable/ic_back"
+                android:background="@color/primary"
+                android:elevation="3dp"
+                app:title="@{viewModel.articleTitle}"
+                app:titleTextColor="@android:color/white">
+        </android.support.v7.widget.Toolbar>
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/fragment_comment_refreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_comment_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <LinearLayout
+                android:visibility="@{gloableViewModel.login? View.VISIBLE:View.GONE}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@android:color/white"
+                android:gravity="center_vertical"
+                android:padding="5dp">
+
+            <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:hint="请输入评论"
+                    android:textSize="16sp"
+                    android:text="@={viewModel.comment}"
+                    />
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_send"
+                    android:onClick="@{()->viewModel.submit()}"
+                    android:background="@android:color/transparent"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

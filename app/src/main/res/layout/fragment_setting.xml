@@ -103,7 +103,10 @@
                     android:height="50dp"
                     android:padding="10dp"
                     android:layout_marginTop="10dp"
-                    android:elevation="3dp"/>
+                    android:elevation="3dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:onClick="@{()->viewModel.logoutClick()}"/>
         </LinearLayout>
 
     </LinearLayout>

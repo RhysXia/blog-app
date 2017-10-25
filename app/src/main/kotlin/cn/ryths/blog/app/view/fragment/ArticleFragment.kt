@@ -4,6 +4,7 @@ import android.app.Fragment
 import android.databinding.DataBindingUtil
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
+import android.databinding.ObservableLong
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import cn.ryths.blog.app.api.ArticleApi
 import cn.ryths.blog.app.databinding.FragmentArticleBinding
 import cn.ryths.blog.app.entity.Article
 import cn.ryths.blog.app.entity.Code
+import cn.ryths.blog.app.entity.User
 import cn.ryths.blog.app.view.viewModel.GlobalViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -26,6 +28,7 @@ class ArticleFragment : Fragment() {
     private var articleId: Long = 0
 
 
+    private lateinit var article: Article
     private lateinit var binding: FragmentArticleBinding
 
     companion object {
@@ -39,7 +42,7 @@ class ArticleFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article, parent, false)
         binding.fragmentArticleToolbar.setNavigationOnClickListener {
-            fragmentManager.popBackStack()
+            activity.finish()
         }
         binding.fragmentArticleContent.settings.javaScriptEnabled = true
         binding.globalViewModel = GlobalViewModel.getInstance()
@@ -50,7 +53,11 @@ class ArticleFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     if (it.code == Code.SUCCESS) {
-                        viewModel.article.set(it.data)
+                        article = it.data!!
+                        viewModel.title.set(it.data!!.title)
+                        viewModel.poster.set(it.data!!.poster)
+                        viewModel.author.set(it.data!!.author)
+                        viewModel.praiseNum.set(it.data!!.praiseNum!!)
                         binding.fragmentArticleContent.addJavascriptInterface(JsClient(it.data!!.content), "JsClient")
                         binding.fragmentArticleContent.loadUrl("file:///android_asset/markdown.html")
                     }
@@ -61,6 +68,8 @@ class ArticleFragment : Fragment() {
                 .subscribe({
                     if (it.code == Code.SUCCESS) {
                         viewModel.praised.set(it.data!!)
+                    } else {
+                        viewModel.praised.set(false)
                     }
                 }, {
                     viewModel.praised.set(false)
@@ -80,22 +89,51 @@ class ArticleFragment : Fragment() {
     }
 
     inner class ViewModel {
+        val title = ObservableField<String>("")
+        val poster = ObservableField<String>()
+        val praiseNum = ObservableLong(0)
+        val author = ObservableField<User>()
 
-        val article: ObservableField<Article> = ObservableField()
         val praised = ObservableBoolean(false)
 
         fun praiseClick() {
             val isLogin = GlobalViewModel.getInstance().login
             if (!isLogin) {
                 Toast.makeText(activity, "请登录后再进行点赞", Toast.LENGTH_SHORT).show()
+                return
+            }
+            //取消点赞
+            if (praised.get()) {
+                articleApi.deletePraise(articleId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            praiseNum.set(praiseNum.get() - 1)
+                            //设置点赞标志
+                            praised.set(false)
+                            Toast.makeText(activity, "取消点赞成功", Toast.LENGTH_SHORT).show()
+                        }, {})
+            } else {
+                //请求服务器，点赞
+                articleApi.praise(articleId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            //修改点赞数
+                            praiseNum.set(praiseNum.get() + 1)
+                            //设置点赞标志
+                            praised.set(true)
+                            Toast.makeText(activity, "点赞成功", Toast.LENGTH_SHORT).show()
+                        }, {})
             }
         }
 
         fun commentClick() {
-            val isLogin = GlobalViewModel.getInstance().login
-            if (!isLogin) {
-                Toast.makeText(activity, "请登录后再进行评论", Toast.LENGTH_SHORT).show()
-            }
+            val commentFragment = CommentFragment.newInstance(article)
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.activity_article_frameLayout, commentFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
 
     }

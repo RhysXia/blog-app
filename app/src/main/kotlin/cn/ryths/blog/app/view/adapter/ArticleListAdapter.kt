@@ -104,7 +104,7 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHo
         }
 
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.list_item, parent, false)
+        val view = inflater.inflate(R.layout.article_list_item, parent, false)
         //如果监听器存在，则监听当前view的点击事件
         if (listener != null) {
             view.setOnClickListener {

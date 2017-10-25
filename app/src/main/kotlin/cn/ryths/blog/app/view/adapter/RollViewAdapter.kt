@@ -5,17 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cn.ryths.blog.app.R
-import cn.ryths.blog.app.databinding.RollItemBinding
+import cn.ryths.blog.app.databinding.ArticleRollItemBinding
 import cn.ryths.blog.app.entity.Article
 import com.jude.rollviewpager.RollPagerView
 import com.jude.rollviewpager.adapter.LoopPagerAdapter
 
 class RollViewAdapter(rollView: RollPagerView) : LoopPagerAdapter(rollView) {
-    private lateinit var binding: RollItemBinding
+    private lateinit var binding: ArticleRollItemBinding
 
     override fun getView(container: ViewGroup, position: Int): View {
         val inflater = LayoutInflater.from(container.context)
-        binding = DataBindingUtil.inflate(inflater, R.layout.roll_item, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.article_roll_item, container, false)
         binding.article = articles[position]
         binding.root.setOnClickListener {
             if (listener != null) {

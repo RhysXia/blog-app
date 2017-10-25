@@ -50,6 +50,6 @@ interface ArticleApi {
      * 取消点赞
      */
     @DELETE("/articles/{id}/praise")
-    fun deletPraise(@Path("id") id: Long): Observable<Result<Void?>>
+    fun deletePraise(@Path("id") id: Long): Observable<Result<Void?>>
 
 }
