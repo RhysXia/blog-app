@@ -66,7 +66,7 @@ class LoginDialogFragment : DialogFragment() {
                         if (it.code == Code.SUCCESS) {
                             TokenUtils.saveToken(activity, it.data!!)
                             listener.onLoginSuccess()
-                            this@LoginDialogFragment.dialog.hide()
+                            this@LoginDialogFragment.dismiss()
                         } else {
                             error.set(it.message)
                         }
