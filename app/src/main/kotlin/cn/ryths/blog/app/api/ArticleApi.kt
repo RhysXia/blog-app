@@ -26,6 +26,16 @@ interface ArticleApi {
                 @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
 
     /**
+     * 获取指定分类下文章列表
+     */
+    @GET("/categories/{categoryId}/articles")
+    fun findAllByCategoryId(@Path("categoryId") categoryId: Long,
+                            @Query("currentPage") currentPage: Int,
+                            @Query("pageSize") pageSize: Int,
+                            @Query("includeCategory") includeCategory: Boolean,
+                            @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
+
+    /**
      * 获取指定id文章
      */
     @GET("/articles/{id}")
@@ -44,7 +54,7 @@ interface ArticleApi {
      * 检查文章是否被点赞
      */
     @GET("/articles/{id}/isPraise")
-    fun checkPraise(@Path("id")Id:Long):Observable<Result<Boolean>>
+    fun checkPraise(@Path("id") Id: Long): Observable<Result<Boolean>>
 
     /**
      * 取消点赞

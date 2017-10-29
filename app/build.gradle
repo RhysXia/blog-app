@@ -55,6 +55,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.jude:rollviewpager:1.4.6'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     kapt 'com.android.databinding:compiler:2.3.0'
 }

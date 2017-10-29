@@ -28,6 +28,8 @@ class ArticleListFragment : Fragment() {
 
     private val pageSize = 10
     private var currentPage = 0
+    private var categoryId: Long? = null
+
 
     private lateinit var articleListAdapter: ArticleListAdapter
 
@@ -36,8 +38,11 @@ class ArticleListFragment : Fragment() {
     private lateinit var rollViewAdapter: RollViewAdapter
 
     companion object {
-        fun newInstance(): ArticleListFragment {
-            return ArticleListFragment()
+        fun newInstance(categoryId: Long?=null): ArticleListFragment {
+
+            val fragment = ArticleListFragment()
+            fragment.categoryId = categoryId
+            return fragment
         }
     }
 
@@ -46,27 +51,32 @@ class ArticleListFragment : Fragment() {
         binding.indexRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         articleListAdapter = ArticleListAdapter()
 
-        rollView = RollPagerView(activity)
-        val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, activity.windowManager.defaultDisplay.height / 4)
-        rollView.layoutParams = layoutParams
-        rollView.setPlayDelay(2000)
-        rollViewAdapter = RollViewAdapter(rollView)
-        rollViewAdapter.setListener(object : RollViewAdapter.ItemListener {
-            override fun onItemClick(view: View, article: Article) {
-                gotoInfo(article.id!!)
-            }
+        if (categoryId == null) {
+            rollView = RollPagerView(activity)
+            val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, activity.windowManager.defaultDisplay.height / 4)
+            rollView.layoutParams = layoutParams
+            rollView.setPlayDelay(2000)
+            rollViewAdapter = RollViewAdapter(rollView)
+            rollViewAdapter.setListener(object : RollViewAdapter.ItemListener {
+                override fun onItemClick(view: View, article: Article) {
+                    gotoInfo(article.id!!)
+                }
 
-        })
-        rollView.setAdapter(rollViewAdapter)
-        freshRollView()
+            })
+            rollView.setAdapter(rollViewAdapter)
+            freshRollView()
+
+            articleListAdapter.addHeader(rollView)
+        }
+
         freshOrUpdateList(false)
-
-        articleListAdapter.addHeader(rollView)
 
         binding.indexRefreshLayout.setOnRefreshListener {
             //重置当前页
             currentPage = 0
-            freshRollView()
+            if (categoryId == null) {
+                freshRollView()
+            }
             freshOrUpdateList(false)
         }
 
@@ -94,8 +104,12 @@ class ArticleListFragment : Fragment() {
     }
 
     private fun freshOrUpdateList(isAddMore: Boolean) {
-        articleApi.findAll(currentPage, pageSize, true, true)
-                .subscribeOn(Schedulers.io())
+        val obs = if (categoryId == null)
+            articleApi.findAll(currentPage, pageSize, true, true)
+        else
+            articleApi.findAllByCategoryId(categoryId!!, currentPage, pageSize, true, true)
+
+        obs.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     if (isAddMore) {
