@@ -103,6 +103,9 @@ class ArticleListFragment : Fragment() {
                     } else {
                         articleListAdapter.setAll(it.data!!)
                     }
+                    binding.indexRefreshLayout.isEnableLoadmore = currentPage + 1 < it.pagination!!.totalPage!!
+                    binding.indexRefreshLayout.finishRefresh()
+                    binding.indexRefreshLayout.finishLoadmore()
                 }, {})
     }
 
