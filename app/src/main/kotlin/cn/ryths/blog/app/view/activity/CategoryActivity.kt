@@ -18,7 +18,7 @@ class CategoryActivity : AppCompatActivity() {
 
         val categoryId = intent.getLongExtra("categoryId", 0)
 
-        val fragment = ArticleListFragment.newInstance(categoryId)
+        val fragment = ArticleListFragment.newInstance(code = ArticleListFragment.CODE_CATEGORY, data = categoryId)
         transaction.add(R.id.activity_category_frameLayout, fragment)
         transaction.show(fragment)
         transaction.commit()

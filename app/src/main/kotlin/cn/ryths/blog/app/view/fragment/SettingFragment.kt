@@ -1,6 +1,7 @@
 package cn.ryths.blog.app.view.fragment
 
 import android.app.Fragment
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import cn.ryths.blog.app.api.UserApi
 import cn.ryths.blog.app.databinding.FragmentSettingBinding
 import cn.ryths.blog.app.entity.Code
 import cn.ryths.blog.app.utils.TokenUtils
+import cn.ryths.blog.app.view.activity.MyArticlesActivity
 import cn.ryths.blog.app.view.viewModel.GlobalViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -64,6 +66,11 @@ class SettingFragment : Fragment() {
             //login置false
             GlobalViewModel.getInstance().login = false
             GlobalViewModel.getInstance().user = null
+        }
+
+        fun selfArticlesClick(){
+            val intent = Intent(activity,MyArticlesActivity::class.java)
+            startActivity(intent)
         }
     }
 

@@ -28,7 +28,6 @@ class ArticleListFragment : Fragment() {
 
     private val pageSize = 10
     private var currentPage = 0
-    private var categoryId: Long? = null
 
 
     private lateinit var articleListAdapter: ArticleListAdapter
@@ -37,13 +36,34 @@ class ArticleListFragment : Fragment() {
 
     private lateinit var rollViewAdapter: RollViewAdapter
 
-    companion object {
-        fun newInstance(categoryId: Long?=null): ArticleListFragment {
+    /**
+     * 存放传进来的数据，类型需要根据加载类型确定
+     */
+    private var data: Any? = null
 
+    private var code = CODE_DEFAULT
+
+
+    companion object {
+        fun newInstance(code: Int = CODE_DEFAULT, data: Any? = null): ArticleListFragment {
             val fragment = ArticleListFragment()
-            fragment.categoryId = categoryId
+            fragment.code = code
+            fragment.data = data
             return fragment
         }
+
+        /**
+         * 默认加载数据的方式
+         */
+        val CODE_DEFAULT = 0
+        /**
+         * 加载指定分类下的数据
+         */
+        val CODE_CATEGORY = 1
+        /**
+         * 加载当前登录用户的文章
+         */
+        val CODE_SELF = 2
     }
 
     override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?): View {
@@ -51,7 +71,7 @@ class ArticleListFragment : Fragment() {
         binding.indexRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         articleListAdapter = ArticleListAdapter()
 
-        if (categoryId == null) {
+        if (code == CODE_DEFAULT) {
             rollView = RollPagerView(activity)
             val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, activity.windowManager.defaultDisplay.height / 4)
             rollView.layoutParams = layoutParams
@@ -74,7 +94,7 @@ class ArticleListFragment : Fragment() {
         binding.indexRefreshLayout.setOnRefreshListener {
             //重置当前页
             currentPage = 0
-            if (categoryId == null) {
+            if (code == CODE_DEFAULT) {
                 freshRollView()
             }
             freshOrUpdateList(false)
@@ -104,10 +124,11 @@ class ArticleListFragment : Fragment() {
     }
 
     private fun freshOrUpdateList(isAddMore: Boolean) {
-        val obs = if (categoryId == null)
-            articleApi.findAll(currentPage, pageSize, true, true)
-        else
-            articleApi.findAllByCategoryId(categoryId!!, currentPage, pageSize, true, true)
+        val obs = when (code) {
+            CODE_CATEGORY -> articleApi.findAllByCategoryId(data as Long, currentPage, pageSize, true, true)
+            CODE_SELF->articleApi.findAllSelf(currentPage, pageSize, true, true)
+            else -> articleApi.findAll(currentPage, pageSize, true, true)
+        }
 
         obs.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

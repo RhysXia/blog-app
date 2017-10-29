@@ -11,6 +11,8 @@
         <variable
                 name="globalViewModel"
                 type="cn.ryths.blog.app.view.viewModel.GlobalViewModel"/>
+
+        <import type="android.view.View"/>
     </data>
 
     <LinearLayout
@@ -45,7 +47,8 @@
                     app:loadImage="@{viewModel.author.avatar}"/>
 
             <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingLeft="5dp">
@@ -65,6 +68,13 @@
                         android:ellipsize="end"
                         android:text="@{viewModel.author.summary}"/>
             </LinearLayout>
+
+            <Button
+                    android:visibility="@{(globalViewModel.user.id == viewModel.author.id) ? View.VISIBLE : View.GONE}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:text="编辑"/>
         </LinearLayout>
 
         <!--文章-->

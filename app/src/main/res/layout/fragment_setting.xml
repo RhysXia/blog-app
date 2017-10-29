@@ -89,10 +89,23 @@
                             android:text="@{globalViewModel.user.summary}"/>
                 </LinearLayout>
             </LinearLayout>
+            <TextView
+                    android:visibility="@{!globalViewModel.login ? View.GONE : View.VISIBLE}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_bottom"
+                    android:text="查看我的文章"
+                    android:drawableLeft="@drawable/ic_logout"
+                    android:height="50dp"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:elevation="3dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:onClick="@{()->viewModel.selfArticlesClick()}"/>
 
             <TextView
                     android:visibility="@{!globalViewModel.login ? View.GONE : View.VISIBLE}"
-                    android:id="@+id/tab_setting_login_logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border_bottom"

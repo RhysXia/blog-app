@@ -62,4 +62,10 @@ interface ArticleApi {
     @DELETE("/articles/{id}/praise")
     fun deletePraise(@Path("id") id: Long): Observable<Result<Void?>>
 
+    @GET("/articles/self")
+    fun findAllSelf(@Query("currentPage") currentPage: Int,
+                    @Query("pageSize") pageSize: Int,
+                    @Query("includeCategory") includeCategory: Boolean,
+                    @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
+
 }
