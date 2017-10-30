@@ -13,6 +13,7 @@ import cn.ryths.blog.app.api.UserApi
 import cn.ryths.blog.app.databinding.FragmentSettingBinding
 import cn.ryths.blog.app.entity.Code
 import cn.ryths.blog.app.utils.TokenUtils
+import cn.ryths.blog.app.view.activity.ArticleWriteActivity
 import cn.ryths.blog.app.view.activity.MyArticlesActivity
 import cn.ryths.blog.app.view.viewModel.GlobalViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -68,8 +69,13 @@ class SettingFragment : Fragment() {
             GlobalViewModel.getInstance().user = null
         }
 
-        fun selfArticlesClick(){
-            val intent = Intent(activity,MyArticlesActivity::class.java)
+        fun selfArticlesClick() {
+            val intent = Intent(activity, MyArticlesActivity::class.java)
+            startActivity(intent)
+        }
+
+        fun writeArticlesClick() {
+            val intent = Intent(activity, ArticleWriteActivity::class.java)
             startActivity(intent)
         }
     }

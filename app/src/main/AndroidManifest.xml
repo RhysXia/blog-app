@@ -3,6 +3,7 @@
           package="cn.ryths.blog.app">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
             android:name=".BaseApplication"
@@ -23,6 +24,8 @@
         <activity android:name=".view.activity.CategoryActivity">
         </activity>
         <activity android:name=".view.activity.MyArticlesActivity">
+        </activity>
+        <activity android:name=".view.activity.ArticleWriteActivity">
         </activity>
     </application>
 

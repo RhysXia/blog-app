@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,6 +24,9 @@ public class CustomBindingAdapter {
 
     @BindingAdapter("loadImage")
     public static void loadImage(ImageView imageView, String src) {
+        if(src == null){
+            return;
+        }
         Picasso.with(imageView.getContext())
                 .load(src)
                 .into(imageView);
@@ -32,5 +36,16 @@ public class CustomBindingAdapter {
     public static void text(TextView textView, Date date) {
         String strDate = new SimpleDateFormat("yyyy/MM/dd HH:ss").format(date);
         textView.setText(strDate);
+    }
+
+    @BindingAdapter("app:loadLocalImage")
+    public static void loadLocalImage(ImageView imageView, String path) {
+        if(path == null){
+            return;
+        }
+        File file = new File(path);
+        Picasso.with(imageView.getContext())
+                .load(file)
+                .into(imageView);
     }
 }

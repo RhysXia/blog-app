@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+                name="viewModel"
+                type="cn.ryths.blog.app.view.fragment.ArticleWriteTwoFragment.ViewModel"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/fragment_article_write_two_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="写文章"
+                app:navigationIcon="@drawable/ic_back"
+                app:titleTextColor="@android:color/white"
+                android:background="@color/primary"
+                android:elevation="3dp">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical|end">
+
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="上一步"
+                        android:background="@android:color/transparent"
+                        android:textColor="@android:color/white"
+                        android:onClick="@{()->viewModel.back()}"/>
+
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="完成"
+                        android:background="@android:color/transparent"
+                        android:textColor="@{viewModel.canNext?@android:color/white:@android:color/darker_gray}"
+                        android:enabled="@{viewModel.canNext}"
+                        android:onClick="@{()->viewModel.next()}"/>
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="fitXY"
+                android:visibility="@{viewModel.poster != null ? View.VISIBLE:View.GONE}"
+                app:loadLocalImage="@{viewModel.poster}"/>
+
+        <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="请选择海报"
+                android:onClick="@{()->viewModel.choosePoster()}"/>
+
+        <EditText
+                android:gravity="start|top"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:inputType="textMultiLine"
+                android:text="@={viewModel.summary}"
+                android:hint="请输入文章概要"/>
+    </LinearLayout>
+</layout>

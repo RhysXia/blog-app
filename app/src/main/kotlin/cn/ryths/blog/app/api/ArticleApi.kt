@@ -3,6 +3,8 @@ package cn.ryths.blog.app.api
 import cn.ryths.blog.app.entity.Article
 import cn.ryths.blog.app.entity.Result
 import io.reactivex.Observable
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface ArticleApi {
@@ -68,4 +70,14 @@ interface ArticleApi {
                     @Query("includeCategory") includeCategory: Boolean,
                     @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
 
+    /**
+     * 添加文章
+     */
+    @Multipart
+    @POST(value = "/articles")
+    fun add(@Part("title") title: String,
+            @Part("summary") summary: String,
+            @Part("content") content: String,
+            @Part("categoryId") categoryId: Long,
+            @Part posterFile: MultipartBody.Part): Observable<Result<Void>>
 }

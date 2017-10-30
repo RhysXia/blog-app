@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+                name="viewModel"
+                type="cn.ryths.blog.app.view.fragment.ArticleWriteOneFragment.ViewModel"/>
+    </data>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/fragment_article_write_one_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="写文章"
+                app:navigationIcon="@drawable/ic_back"
+                app:titleTextColor="@android:color/white"
+                android:background="@color/primary"
+                android:elevation="3dp">
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="下一步"
+                    android:layout_gravity="end|center_vertical"
+                    android:background="@android:color/transparent"
+                    android:textColor="@{viewModel.canNext?@android:color/white:@android:color/darker_gray}"
+                    android:enabled="@{viewModel.canNext}"
+                    android:onClick="@{()->viewModel.next()}"/>
+
+        </android.support.v7.widget.Toolbar>
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="请输入标题"
+                android:text="@={viewModel.title}"
+                android:inputType="text"
+                android:background="@android:color/white"
+                android:padding="2dp"/>
+
+        <Spinner
+                android:id="@+id/fragment_article_write_one_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="请输入分类"
+                android:background="@android:color/white"
+                android:padding="2dp"/>
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="0dp"
+                android:inputType="textMultiLine"
+                android:gravity="left|top"
+                android:hint="请输入文章内容"
+                android:text="@={viewModel.content}"
+                android:background="@android:color/white"
+                android:padding="2dp"/>
+    </LinearLayout>
+</layout>
