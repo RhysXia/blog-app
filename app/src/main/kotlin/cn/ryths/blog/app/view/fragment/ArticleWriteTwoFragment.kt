@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
+import android.widget.Toast
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.api.Api
 import cn.ryths.blog.app.api.ArticleApi
@@ -65,22 +66,24 @@ class ArticleWriteTwoFragment : Fragment() {
         var poster: String? = null
             set(value) {
                 field = value
-                canNext = checkNext()
                 this.notifyPropertyChanged(cn.ryths.blog.app.BR.poster)
-                this.notifyPropertyChanged(cn.ryths.blog.app.BR.canNext)
+                canNext = checkNext()
             }
 
         @Bindable
         var summary: String? = null
             set(value) {
                 field = value
-                canNext = checkNext()
                 this.notifyPropertyChanged(cn.ryths.blog.app.BR.summary)
-                this.notifyPropertyChanged(cn.ryths.blog.app.BR.canNext)
+                canNext = checkNext()
             }
 
         @Bindable
         var canNext: Boolean = false
+            set(value){
+                field = value
+                this.notifyPropertyChanged(cn.ryths.blog.app.BR.canNext)
+            }
 
         fun checkNext() = !poster.isNullOrBlank() && !summary.isNullOrBlank()
 
@@ -92,24 +95,37 @@ class ArticleWriteTwoFragment : Fragment() {
         }
 
         fun next() {
+            //点击之后，就不允许再点击了，直到完成文件上传
+            canNext = false
+
             val article = (activity as ArticleWriteActivity).article
 
             article.poster = poster
             article.summary = summary
 
             val articleApi = Api.newApiInstance(ArticleApi::class.java)
+
             val posterFile = File(article.poster)
             val contentType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(poster!!.substring(poster!!.lastIndexOf(".") + 1))
             val posterBody = MultipartBody.create(MediaType.parse(contentType), posterFile)
-            val part = MultipartBody.Part.createFormData("posterFile",posterFile.name,posterBody)
-            articleApi.add(article.title!!, article.summary!!, article.content!!, article.categoryId!!, part)
+            val part = MultipartBody.Part.createFormData("posterFile", posterFile.name, posterBody)
+
+            articleApi.add(MultipartBody.Part.createFormData("title", article.title!!),
+                    MultipartBody.Part.createFormData("summary", article.summary!!),
+                    MultipartBody.Part.createFormData("content", article.content!!),
+                    MultipartBody.Part.createFormData("categoryId", article.categoryId.toString()),
+                    part)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         if (it.code == Code.SUCCESS) {
+                            Toast.makeText(activity, "完成文章", Toast.LENGTH_SHORT).show()
                             this@ArticleWriteTwoFragment.activity.finish()
                         }
-                    }, {})
+                    }, {
+                        //上传失败，按钮重新激活
+                        canNext = true
+                    })
 
 
         }

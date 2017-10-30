@@ -16,7 +16,8 @@ interface ArticleApi {
     fun findAllRecommendation(@Query("currentPage") currentPage: Int,
                               @Query("pageSize") pageSize: Int,
                               @Query("includeCategory") includeCategory: Boolean,
-                              @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
+                              @Query("includeAuthor") includeAuthor: Boolean,
+                              @Query("orderBy")orderBy:String = "updateDate:DESC"): Observable<Result<List<Article>>>
 
     /**
      * 获取文章列表
@@ -25,7 +26,8 @@ interface ArticleApi {
     fun findAll(@Query("currentPage") currentPage: Int,
                 @Query("pageSize") pageSize: Int,
                 @Query("includeCategory") includeCategory: Boolean,
-                @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
+                @Query("includeAuthor") includeAuthor: Boolean,
+                @Query("orderBy")orderBy:String = "updateDate:DESC"): Observable<Result<List<Article>>>
 
     /**
      * 获取指定分类下文章列表
@@ -35,7 +37,8 @@ interface ArticleApi {
                             @Query("currentPage") currentPage: Int,
                             @Query("pageSize") pageSize: Int,
                             @Query("includeCategory") includeCategory: Boolean,
-                            @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
+                            @Query("includeAuthor") includeAuthor: Boolean,
+                            @Query("orderBy")orderBy:String = "updateDate:DESC"): Observable<Result<List<Article>>>
 
     /**
      * 获取指定id文章
@@ -68,16 +71,17 @@ interface ArticleApi {
     fun findAllSelf(@Query("currentPage") currentPage: Int,
                     @Query("pageSize") pageSize: Int,
                     @Query("includeCategory") includeCategory: Boolean,
-                    @Query("includeAuthor") includeAuthor: Boolean): Observable<Result<List<Article>>>
+                    @Query("includeAuthor") includeAuthor: Boolean,
+                    @Query("orderBy")orderBy:String = "updateDate:DESC"): Observable<Result<List<Article>>>
 
     /**
      * 添加文章
      */
     @Multipart
     @POST(value = "/articles")
-    fun add(@Part("title") title: String,
-            @Part("summary") summary: String,
-            @Part("content") content: String,
-            @Part("categoryId") categoryId: Long,
+    fun add(@Part title: MultipartBody.Part,
+            @Part summary: MultipartBody.Part,
+            @Part content: MultipartBody.Part,
+            @Part categoryId: MultipartBody.Part,
             @Part posterFile: MultipartBody.Part): Observable<Result<Void>>
 }
