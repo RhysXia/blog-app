@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import cn.ryths.blog.app.BR
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.api.Api
 import cn.ryths.blog.app.api.ArticleApi
@@ -35,10 +36,12 @@ class ArticleWriteTwoFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_write_two, container, false)
 
         //获取activity中articleDto数据，存入viewModel
-        val article = (activity as ArticleWriteActivity).article
-
+        val article = (activity as ArticleWriteActivity).articleDto
+        //判断是修改还是添加
+        viewModel.add = article.id == null
         viewModel.summary = article.summary
         viewModel.poster = article.poster
+
 
         binding.viewModel = viewModel
 
@@ -61,13 +64,31 @@ class ArticleWriteTwoFragment : Fragment() {
     }
 
     inner class ViewModel : BaseObservable() {
-
+        @Bindable
+        var add: Boolean = true
+            set(value) {
+                field = value
+                this.notifyPropertyChanged(BR.add)
+            }
+        /**
+         * 显示从本地加载图像还是从网上加载
+         */
+        @Bindable
+        var showLocalPoster = false
+            set(value) {
+                field = value
+                this.notifyPropertyChanged(BR.showLocalPoster)
+            }
         @Bindable
         var poster: String? = null
             set(value) {
                 field = value
                 this.notifyPropertyChanged(cn.ryths.blog.app.BR.poster)
                 canNext = checkNext()
+                //判断是否是加载本地文件
+                if (value != null) {
+                    showLocalPoster = !value.startsWith("http", true)
+                }
             }
 
         @Bindable
@@ -80,7 +101,7 @@ class ArticleWriteTwoFragment : Fragment() {
 
         @Bindable
         var canNext: Boolean = false
-            set(value){
+            set(value) {
                 field = value
                 this.notifyPropertyChanged(cn.ryths.blog.app.BR.canNext)
             }
@@ -98,24 +119,42 @@ class ArticleWriteTwoFragment : Fragment() {
             //点击之后，就不允许再点击了，直到完成文件上传
             canNext = false
 
-            val article = (activity as ArticleWriteActivity).article
+            val article = (activity as ArticleWriteActivity).articleDto
+
 
             article.poster = poster
             article.summary = summary
 
             val articleApi = Api.newApiInstance(ArticleApi::class.java)
 
-            val posterFile = File(article.poster)
-            val contentType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(poster!!.substring(poster!!.lastIndexOf(".") + 1))
-            val posterBody = MultipartBody.create(MediaType.parse(contentType), posterFile)
-            val part = MultipartBody.Part.createFormData("posterFile", posterFile.name, posterBody)
 
-            articleApi.add(MultipartBody.Part.createFormData("title", article.title!!),
-                    MultipartBody.Part.createFormData("summary", article.summary!!),
-                    MultipartBody.Part.createFormData("content", article.content!!),
-                    MultipartBody.Part.createFormData("categoryId", article.categoryId.toString()),
-                    part)
-                    .subscribeOn(Schedulers.io())
+            val api = if (add) {
+                val posterFile = File(article.poster)
+                val contentType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(poster!!.substring(poster!!.lastIndexOf(".") + 1))
+                val posterBody = MultipartBody.create(MediaType.parse(contentType), posterFile)
+                val part = MultipartBody.Part.createFormData("posterFile", posterFile.name, posterBody)
+                articleApi.add(MultipartBody.Part.createFormData("title", article.title!!),
+                        MultipartBody.Part.createFormData("summary", article.summary!!),
+                        MultipartBody.Part.createFormData("content", article.content!!),
+                        MultipartBody.Part.createFormData("categoryId", article.categoryId.toString()),
+                        part)
+            } else {
+                var part: MultipartBody.Part? = null
+                if (showLocalPoster) {
+                    val posterFile = File(article.poster)
+                    val contentType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(poster!!.substring(poster!!.lastIndexOf(".") + 1))
+                    val posterBody = MultipartBody.create(MediaType.parse(contentType), posterFile)
+                    part = MultipartBody.Part.createFormData("posterFile", posterFile.name, posterBody)
+                }
+                articleApi.update(MultipartBody.Part.createFormData("id", article.id.toString()),
+                        MultipartBody.Part.createFormData("title", article.title!!),
+                        MultipartBody.Part.createFormData("summary", article.summary!!),
+                        MultipartBody.Part.createFormData("content", article.content!!),
+                        MultipartBody.Part.createFormData("categoryId", article.categoryId.toString()),
+                        part)
+            }
+
+            api.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         if (it.code == Code.SUCCESS) {
@@ -127,12 +166,11 @@ class ArticleWriteTwoFragment : Fragment() {
                         canNext = true
                     })
 
-
         }
 
         fun back() {
             //保存当前输入状态
-            val article = (activity as ArticleWriteActivity).article
+            val article = (activity as ArticleWriteActivity).articleDto
             article.summary = viewModel.summary
             article.poster = viewModel.poster
             fragmentManager.popBackStack()

@@ -1,6 +1,7 @@
 package cn.ryths.blog.app.view.fragment
 
 import android.app.Fragment
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
@@ -18,6 +19,7 @@ import cn.ryths.blog.app.databinding.FragmentArticleBinding
 import cn.ryths.blog.app.entity.Article
 import cn.ryths.blog.app.entity.Code
 import cn.ryths.blog.app.entity.User
+import cn.ryths.blog.app.view.activity.ArticleWriteActivity
 import cn.ryths.blog.app.view.viewModel.GlobalViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -39,6 +41,7 @@ class ArticleFragment : Fragment() {
         }
     }
 
+    private val viewModel = ViewModel()
     override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article, parent, false)
         binding.fragmentArticleToolbar.setNavigationOnClickListener {
@@ -46,22 +49,9 @@ class ArticleFragment : Fragment() {
         }
         binding.fragmentArticleContent.settings.javaScriptEnabled = true
         binding.globalViewModel = GlobalViewModel.getInstance()
-        val viewModel = ViewModel()
+
         binding.viewModel = viewModel
-        articleApi.findById(articleId, true, true, true)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    if (it.code == Code.SUCCESS) {
-                        article = it.data!!
-                        viewModel.title.set(it.data!!.title)
-                        viewModel.poster.set(it.data!!.poster)
-                        viewModel.author.set(it.data!!.author)
-                        viewModel.praiseNum.set(it.data!!.praiseNum!!)
-                        binding.fragmentArticleContent.addJavascriptInterface(JsClient(it.data!!.content), "JsClient")
-                        binding.fragmentArticleContent.loadUrl("file:///android_asset/markdown.html")
-                    }
-                }, {})
+        getArticle()
         articleApi.checkPraise(articleId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -77,6 +67,23 @@ class ArticleFragment : Fragment() {
         return binding.root
     }
 
+    private fun getArticle() {
+        articleApi.findById(articleId, true, true, true)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (it.code == Code.SUCCESS) {
+                        article = it.data!!
+                        viewModel.title.set(it.data!!.title)
+                        viewModel.poster.set(it.data!!.poster)
+                        viewModel.author.set(it.data!!.author)
+                        viewModel.praiseNum.set(it.data!!.praiseNum!!)
+                        binding.fragmentArticleContent.addJavascriptInterface(JsClient(it.data!!.content), "JsClient")
+                        binding.fragmentArticleContent.loadUrl("file:///android_asset/markdown.html")
+                    }
+                }, {})
+    }
+
     /**
      * js调用的api
      */
@@ -86,6 +93,20 @@ class ArticleFragment : Fragment() {
          */
         @JavascriptInterface
         fun getContent() = content
+    }
+
+    /**
+     * 修改文章的请求码
+     */
+    private val CODE_UPDATE_ARTICLE: Int = 0
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            CODE_UPDATE_ARTICLE->{
+                getArticle()
+            }
+        }
     }
 
     inner class ViewModel {
@@ -134,6 +155,12 @@ class ArticleFragment : Fragment() {
             transaction.replace(R.id.activity_article_frameLayout, commentFragment)
             transaction.addToBackStack(null)
             transaction.commit()
+        }
+
+        fun update() {
+            val intent = Intent(activity, ArticleWriteActivity::class.java)
+            intent.putExtra("articleId", articleId)
+            startActivityForResult(intent, CODE_UPDATE_ARTICLE)
         }
 
     }

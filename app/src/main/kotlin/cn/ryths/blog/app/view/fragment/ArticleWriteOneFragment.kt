@@ -2,12 +2,14 @@ package cn.ryths.blog.app.view.fragment
 
 import android.app.Fragment
 import android.databinding.BaseObservable
+import android.databinding.Bindable
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import cn.ryths.blog.app.BR
 import cn.ryths.blog.app.R
 import cn.ryths.blog.app.api.Api
 import cn.ryths.blog.app.api.CategoryApi
@@ -31,7 +33,10 @@ class ArticleWriteOneFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_write_one, container, false)
 
         //获取activity中articleDto数据，存入viewModel
-        val article = (activity as ArticleWriteActivity).article
+        val article = (activity as ArticleWriteActivity).articleDto
+
+        //判断是修改还是添加
+        viewModel.add = article.id == null
 
         viewModel.title = article.title
         viewModel.content = article.content
@@ -72,33 +77,43 @@ class ArticleWriteOneFragment : Fragment() {
     }
 
     inner class ViewModel : BaseObservable() {
-
+        @Bindable
+        var add:Boolean = true
+            set(value){
+                field = value
+                this.notifyPropertyChanged(BR.add)
+            }
+        @Bindable
         var title: String? = null
             set(value) {
                 field = value
+                this.notifyPropertyChanged(BR.title)
                 canNext = checkNext()
-                this.notifyChange()
             }
-
+        @Bindable
         var content: String? = null
             set(value) {
                 field = value
+                this.notifyPropertyChanged(BR.content)
                 canNext = checkNext()
-                this.notifyChange()
             }
         var category: Category? = null
             set(value) {
                 field = value
                 canNext = checkNext()
-                this.notifyChange()
             }
+        @Bindable
         var canNext: Boolean = false
+            set(value) {
+                field = value
+                this.notifyPropertyChanged(BR.canNext)
+            }
 
         fun checkNext() = !title.isNullOrBlank() && !content.isNullOrBlank() && category != null
 
         fun next() {
             //将数据回写到activity中
-            val article = (activity as ArticleWriteActivity).article
+            val article = (activity as ArticleWriteActivity).articleDto
             article.categoryId = category!!.id
 
             article.title = title

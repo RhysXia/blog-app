@@ -20,7 +20,7 @@
                 android:id="@+id/fragment_article_write_two_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="写文章"
+                app:title="@{viewModel.add ? @string/article_add : @string/article_update}"
                 app:navigationIcon="@drawable/ic_back"
                 app:titleTextColor="@android:color/white"
                 android:background="@color/primary"
@@ -57,7 +57,8 @@
                 android:layout_height="200dp"
                 android:scaleType="fitXY"
                 android:visibility="@{viewModel.poster != null ? View.VISIBLE:View.GONE}"
-                app:loadLocalImage="@{viewModel.poster}"/>
+                app:loadLocalImage="@{viewModel.showLocalPoster?viewModel.poster: null}"
+                app:loadImage="@{viewModel.showLocalPoster?null:viewModel.poster}"/>
 
         <Button
                 android:layout_width="match_parent"

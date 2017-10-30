@@ -74,7 +74,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:text="编辑"/>
+                    android:text="编辑"
+                    android:onClick="@{()->viewModel.update()}"/>
         </LinearLayout>
 
         <!--文章-->

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Blog</string>
+    <string name="article_add">写文章</string>
+    <string name="article_update">修改文章</string>
 </resources>

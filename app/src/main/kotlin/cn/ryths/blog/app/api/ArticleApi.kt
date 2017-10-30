@@ -78,10 +78,22 @@ interface ArticleApi {
      * 添加文章
      */
     @Multipart
-    @POST(value = "/articles")
+    @POST("/articles")
     fun add(@Part title: MultipartBody.Part,
             @Part summary: MultipartBody.Part,
             @Part content: MultipartBody.Part,
             @Part categoryId: MultipartBody.Part,
-            @Part posterFile: MultipartBody.Part): Observable<Result<Void>>
+            @Part posterFile: MultipartBody.Part): Observable<Result<Article>>
+
+    /**
+     * 更新文章
+     */
+    @Multipart
+    @PUT("/articles")
+    fun update(@Part id: MultipartBody.Part,
+               @Part title: MultipartBody.Part,
+               @Part summary: MultipartBody.Part,
+               @Part content: MultipartBody.Part,
+               @Part categoryId: MultipartBody.Part,
+               @Part posterFile: MultipartBody.Part?): Observable<Result<Article>>
 }
